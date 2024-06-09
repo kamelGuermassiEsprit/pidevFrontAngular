@@ -61,7 +61,6 @@ export class ChatComponent implements OnInit {
       .subscribe(
         (res: { translatedMsg: string }) => {
           this.data.messages[index].msg_text = res.translatedMsg;
-          console.log(this.data.messages);
         },
         (er) => {
           console.error(er);
@@ -79,7 +78,6 @@ export class ChatComponent implements OnInit {
     }
   }
   addEmoji(event: any) {
-    console.log(event.emoji.native);
     this.msg = this.msg + event.emoji.native;
   }
   toggletranslateButtons() {
@@ -131,6 +129,8 @@ export class ChatComponent implements OnInit {
             this.data = res;
             this.msgs = res ? res.messages : [];
           });
+        this.msg = '';
+        this.showEmojiButtons = false;
       }
     );
   }

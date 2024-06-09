@@ -116,7 +116,9 @@
                       >
                     </button>
 
-                    <div class="chat-time">09:51</div>
+                    <div class="chat-time">
+                      {{ i.updatedAt.split("T")[1].substr(0, 5) }}
+                    </div>
                   </div>
                 </div>
                 <div
