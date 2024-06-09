@@ -11,6 +11,8 @@ import { Dashboard2Component } from './dashboard2/dashboard2.component';
 import { NgbProgressbarModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChatComponent } from './chat/chat.component';
 import { ChatService } from '../services/chat.service';
+import { FormsModule } from '@angular/forms';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 @NgModule({
   declarations: [MainComponent, Dashboard2Component, ChatComponent],
   imports: [
@@ -24,6 +26,8 @@ import { ChatService } from '../services/chat.service';
     NgApexchartsModule,
     NgbProgressbarModule,
     NgxGaugeModule,
+    FormsModule,
+    PickerComponent,
   ],
   providers: [ChatService],
 })

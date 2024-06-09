@@ -24,7 +24,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
-
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import {
   HttpClientModule,
   HTTP_INTERCEPTORS,
@@ -66,6 +66,7 @@ export function createTranslateLoader(http: HttpClient) {
     CoreModule,
     SharedModule,
     NgbModule,
+    PickerComponent,
   ],
   providers: [
     { provide: LocationStrategy, useClass: HashLocationStrategy },
