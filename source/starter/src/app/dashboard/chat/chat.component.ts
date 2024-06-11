@@ -15,25 +15,64 @@ export class ChatComponent implements OnInit {
   showEmojiButtons = false;
   messageIndexToDelete: number | null = null;
   closeResult = '';
+  users: any;
+  userSelected: any;
+  userSelectedName: any;
+  userConnected = '6645d4e605d11e5b39329d98';
+  conversationObj: any;
   constructor(
     private chatService: ChatService,
     private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
-    this.chatService.getMessages().subscribe((res: any) => {
-      this.data = res;
-      this.msgs = res ? res.messages : [];
-    });
+    this.allUsers();
+  }
+
+  allUsers() {
+    this.chatService.getUsersApi().subscribe(
+      (res) => {
+        res = res.filter((item: any) => {
+          return item._id !== this.userConnected;
+        });
+        this.users = res;
+        this.userSelectedName = this.users[0].user_name;
+        const sender = this.userSelected ?? this.users[0]._id;
+
+        this.conversationObj = {
+          sender: sender,
+          receiver: this.userConnected,
+        };
+        this.chatService
+          .getMessages(this.conversationObj)
+          .subscribe((res: any) => {
+            this.data = res;
+            this.msgs = res ? res.messages : [];
+          });
+      },
+      (er) => {
+        console.error(er);
+      }
+    );
+  }
+
+  getMessagesForSelectedUser(conversationObj: any): void {
     this.chatService
-      .getMessagesfromApi({
-        sender: '6645d4e605d11e5b39329d98',
-        receiver: '6645d5ed05d11e5b39329ddb',
-      })
+      .getMessagesfromApi(conversationObj)
       .subscribe((res: any) => {
         this.data = res;
         this.msgs = res ? res.messages : [];
       });
+  }
+  onListItemClick(i: any) {
+    this.userSelected = this.users[i]._id;
+    this.userSelectedName = this.users[i].user_name;
+    console.log(this.userSelectedName);
+    this.conversationObj = {
+      sender: this.userSelected,
+      receiver: this.userConnected,
+    };
+    this.getMessagesForSelectedUser(this.conversationObj);
   }
   open(content: any, index: number) {
     this.messageIndexToDelete = index;
@@ -54,7 +93,6 @@ export class ChatComponent implements OnInit {
         }
       );
   }
-
   translate(content: any, index: number) {
     this.chatService
       .translateMessagesfromApi(this.msgs[index].msg_text)
@@ -94,16 +132,15 @@ export class ChatComponent implements OnInit {
     this.chatService.deleteMessages(id, body).subscribe(
       () => {},
       (er) => {
-        this.chatService.getMessages().subscribe((res: any) => {
-          this.data = res;
-          this.msgs = res ? res.messages : [];
-        });
+        this.chatService
+          .getMessages(this.conversationObj)
+          .subscribe((res: any) => {
+            this.data = res;
+            this.msgs = res ? res.messages : [];
+          });
 
         this.chatService
-          .getMessagesfromApi({
-            sender: '6645d4e605d11e5b39329d98',
-            receiver: '6645d5ed05d11e5b39329ddb',
-          })
+          .getMessagesfromApi(this.conversationObj)
           .subscribe((res: any) => {
             this.data = res;
             this.msgs = res ? res.messages : [];
@@ -112,26 +149,26 @@ export class ChatComponent implements OnInit {
     );
   }
   sendMsg() {
-    this.chatService.sendMessages(this.msg).subscribe(
-      () => {},
-      (er) => {
-        this.chatService.getMessages().subscribe((res: any) => {
-          this.data = res;
-          this.msgs = res ? res.messages : [];
-        });
+    this.msg &&
+      this.chatService.sendMessages(this.msg, this.conversationObj).subscribe(
+        () => {},
+        (er) => {
+          this.chatService
+            .getMessages(this.conversationObj)
+            .subscribe((res: any) => {
+              this.data = res;
+              this.msgs = res ? res.messages : [];
+            });
 
-        this.chatService
-          .getMessagesfromApi({
-            sender: '6645d4e605d11e5b39329d98',
-            receiver: '6645d5ed05d11e5b39329ddb',
-          })
-          .subscribe((res: any) => {
-            this.data = res;
-            this.msgs = res ? res.messages : [];
-          });
-        this.msg = '';
-        this.showEmojiButtons = false;
-      }
-    );
+          this.chatService
+            .getMessagesfromApi(this.conversationObj)
+            .subscribe((res: any) => {
+              this.data = res;
+              this.msgs = res ? res.messages : [];
+            });
+          this.msg = '';
+          this.showEmojiButtons = false;
+        }
+      );
   }
 }
