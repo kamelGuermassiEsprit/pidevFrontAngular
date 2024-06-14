@@ -1,3 +1,4 @@
+import { path } from 'd3';
 import { RouteInfo } from './sidebar.metadata';
 export const ROUTES: RouteInfo[] = [
   {
@@ -32,30 +33,10 @@ export const ROUTES: RouteInfo[] = [
         badgeClass: '',
         submenu: [],
       },
-      {
-        path: '/dashboard/dashboard2',
-        title: 'MENUITEMS.HOME.LIST.DASHBOARD2',
-        iconType: '',
-        icon: '',
-        class: 'ml-menu',
-        groupTitle: false,
-        badge: '',
-        badgeClass: '',
-        submenu: [],
-      },
+    
     ],
   },
-  {
-    path: 'advance-table',
-    title: 'MENUITEMS.ADVANCE-TABLE.TEXT',
-    iconType: 'feather',
-    icon: 'trello',
-    class: '',
-    groupTitle: false,
-    badge: '',
-    badgeClass: '',
-    submenu: [],
-  },
+ 
 
   {
     path: '/dashboard/chat',
@@ -159,17 +140,18 @@ export const ROUTES: RouteInfo[] = [
   },
   {
     path: '',
-    title: 'Extra Pages',
+    title: 'Events',
     iconType: 'feather',
-    icon: 'anchor',
+    icon: 'layout',
     class: 'menu-toggle',
     groupTitle: false,
     badge: '',
     badgeClass: '',
     submenu: [
+     
       {
-        path: '/extra-pages/blank',
-        title: 'Blank Page',
+        path: '/Events/EventMangement',
+        title: 'Event Management',
         iconType: '',
         icon: '',
         class: 'ml-menu',
@@ -178,6 +160,19 @@ export const ROUTES: RouteInfo[] = [
         badgeClass: '',
         submenu: [],
       },
+      {
+        path: '/Events/EventsList',
+        title: 'Events list',
+        iconType: '',
+        icon: '',
+        class: 'ml-menu',
+        groupTitle: false,
+        badge: '',
+        badgeClass: '',
+        submenu: [],
+      },
+  
+      
     ],
   },
   {

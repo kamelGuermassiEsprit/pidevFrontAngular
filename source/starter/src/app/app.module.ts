@@ -31,6 +31,8 @@ import {
   HttpClient,
 } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -55,6 +57,7 @@ export function createTranslateLoader(http: HttpClient) {
     ReactiveFormsModule,
     NgScrollbarModule,
     LoadingBarRouterModule,
+    AngularEditorModule ,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

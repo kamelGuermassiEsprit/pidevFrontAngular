@@ -23,7 +23,7 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'extra-pages',
+        path: 'Events',
         loadChildren: () =>
           import('./extra-pages/extra-pages.module').then(
             (m) => m.ExtraPagesModule

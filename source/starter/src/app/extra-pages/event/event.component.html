@@ -1,0 +1,72 @@
+<section class="main-content">
+    <ul class="breadcrumb breadcrumb-style ">
+      <li class="breadcrumb-item">
+        <h5 class="page-title m-b-0">Events</h5>
+      </li>
+    
+      <li class="breadcrumb-item">Events Management</li>
+      <li class="breadcrumb-item">
+
+        <a routerLink="/dashboard/main">
+          <i class="fas fa-home font-17"></i></a>
+
+    </ul>
+    <div class="section-body">
+      <div class="row">
+        <div class="col-12 col-md-12 col-lg-12">
+          <div class="card">
+            <div class="card-header">
+              <h4>Event Management</h4>
+            </div>
+            <div class="card-body">
+              <!-- Add content here -->
+
+              <form (ngSubmit)="CreateEvent()" class="form-group">
+                <div class="mb-3">
+                  <label for="title" class="form-label">Title</label>
+                  <input id="title" [(ngModel)]="event.title" name="title" class="form-control" />
+                </div>
+                <div class="mb-3">
+                  <label for="description" class="form-label">Description</label>
+                  <input id="description" [(ngModel)]="event.description" name="description" class="form-control" />
+                </div>
+                <div class="mb-3">
+                  <label for="location" class="form-label">Location</label>
+                  <input id="location" [(ngModel)]="event.location" name="location" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                  <label for="date_debut" class="form-label">Date Debut</label>
+                  <input type="datetime-local" id="date_debut" [(ngModel)]="event.date_debut" name="date_debut" class="form-control" />
+              </div>
+
+              <div class="mb-3">
+                <label for="date_fin" class="form-label">Date Fin</label>
+                <input type="datetime-local" id="date_fin" [(ngModel)]="event.date_fin" name="date_fin" class="form-control" />
+            </div>
+
+
+            <div class="mb-3">
+              <label for="etat" class="form-label">Etat</label>
+              <select id="etat" [(ngModel)]="event.etat" name="etat" class="form-control stylish-select">
+                <option value="Ouvert">Ouvert</option>
+                <option value="Fermé">Fermé</option>
+                <option value="Annulé">Annulé</option>
+              </select>
+            </div>
+              
+                <div class="mb-3">
+                  <label for="image" class="form-label">Image</label>
+                  <input type="file" (change)="select($event)" class="form-control m-1" placeholder="Upload file">
+                </div>
+                <!-- Add more fields as needed -->
+                <button type="submit" class="btn btn-primary">Create Event</button>
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  

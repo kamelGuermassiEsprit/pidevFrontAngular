@@ -54,7 +54,9 @@
               "./node_modules/@ng-select/ng-select/themes/default.theme.css",
               "./node_modules/ngx-toastr/toastr.css",
               "src/assets/scss/style.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.scss"
+
             ],
             "scripts": [
               "./node_modules/moment/min/moment.min.js",
