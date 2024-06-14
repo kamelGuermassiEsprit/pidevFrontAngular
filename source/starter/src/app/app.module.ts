@@ -5,7 +5,7 @@ import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './layout/header/header.component';
@@ -54,6 +54,7 @@ export function createTranslateLoader(http: HttpClient) {
     HttpClientModule,
     ReactiveFormsModule,
     NgScrollbarModule,
+    FormsModule,
     LoadingBarRouterModule,
     TranslateModule.forRoot({
       loader: {

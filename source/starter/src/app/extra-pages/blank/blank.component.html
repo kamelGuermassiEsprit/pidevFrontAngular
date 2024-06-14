@@ -1,27 +1,74 @@
 <section class="main-content">
-  <ul class="breadcrumb breadcrumb-style ">
+  <ul class="breadcrumb breadcrumb-style">
     <li class="breadcrumb-item">
-      <h5 class="page-title m-b-0">Blank</h5>
+      <h5 class="page-title m-b-0">Tourist Sites</h5>
     </li>
     <li class="breadcrumb-item bcrumb-1">
       <a routerLink="/dashboard/main">
         <i class="fas fa-home font-17"></i></a>
     </li>
-    <li class="breadcrumb-item">Extra</li>
-    <li class="breadcrumb-item">Blank</li>
+    <li class="breadcrumb-item">Tourist Sites</li>
   </ul>
   <div class="section-body">
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <input type="text" class="form-control" placeholder="Search by name or place" [(ngModel)]="searchQuery" (change)="searchSites()">
+      </div>
+      <div class="col-md-6">
+        <select class="form-control" [(ngModel)]="selectedCategory" (change)="filterSitesByCategory()">
+          <option value="">All Categories</option>
+          <option value="Historical">Historical</option>
+          <option value="Natural">Natural</option>
+          <option value="Cultural">Cultural</option>
+        </select>
+      </div>
+    </div>
     <div class="row">
-      <div class="col-12 col-md-12 col-lg-12">
+      <div class="col-12 col-md-12 col-lg-12" *ngFor="let site of sites">
         <div class="card">
           <div class="card-header">
-            <h4>Card Title</h4>
+            <h4>{{ site.name }}</h4>
           </div>
           <div class="card-body">
-            <!-- Add content here -->
+            <p>{{ site.description }}</p>
+            <p>Category: {{ site.category }}</p>
+            <p>Average Rating: {{ site.average_rating }}</p>
+            <div *ngIf="site.photos.length > 0">
+              <img [src]="site.photos[0]" alt="{{ site.name }}" class="img-fluid">
+            </div>
+            <div class="review-section">
+              <h5>Leave a Review</h5>
+              <div class="rating">
+                <span *ngFor="let star of [1, 2, 3, 4, 5]" 
+                      (click)="rate(site._id, star)" 
+                      [ngClass]="{'filled': star <= (currentRatingMap.get(site._id) || 0)}">
+                  &#9733;
+                </span>
+              </div>
+              <textarea class="form-control" 
+                        [ngModel]="reviewMap.get(site._id)?.comment || ''"
+                        (ngModelChange)="updateComment(site._id, $event)" 
+                        placeholder="Write your comment..."></textarea>
+              <button class="btn btn-primary mt-2" (click)="submitReview(site)">Submit Review</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<style>
+  .rating {
+    display: flex;
+    justify-content: flex-start;
+  }
+  .rating span {
+    font-size: 24px;
+    cursor: pointer;
+    color: #ddd; /* default star color */
+  }
+  .rating span.filled {
+    color: gold; /* gold color for filled stars */
+  }
+</style>
