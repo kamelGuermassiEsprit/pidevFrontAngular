@@ -41,16 +41,13 @@ export class BlankComponent implements OnInit {
       console.log(data);
     });
   }
-
-  searchSites(): void {
-    if (this.searchQuery) {
-      this.touristSiteService.searchSites(this.searchQuery).subscribe((data: TouristSite[]) => {
-        this.sites = data;
-        this.noSitesFound = this.sites.length === 0;
-      });
-    } else {
-      this.fetchSites();
-    }
+  searchSites(name: string): void {
+    this.touristSiteService.searchSites(name).subscribe((data: TouristSite[]) => {
+      console.log('Search results:', data); // Debugging line
+      this.sites = data;
+    }, error => {
+      console.error('Error fetching search results', error);
+    });
   }
 
   filterSitesByCategory(): void {
