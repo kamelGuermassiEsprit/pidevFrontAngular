@@ -25,12 +25,17 @@
               <img [src]="'http://localhost:5001/uploads/' + event?.image" alt="Event image" class="card-img-top">
               <p>{{ event?.description }}</p>
               <p><small class="text-muted">{{ event?.location }}</small></p>
-              <p><small class="text-muted">Start: {{ event.date_debut | date }}</small></p>
-              <p><small class="text-muted">End: {{ event.date_fin | date}}</small></p>
-              <p><small class="text-muted">{{ event.etat }}</small></p>
+              <p><small class="text-muted">Start: {{ event?.date_debut | date }}</small></p>
+              <p><small class="text-muted">End: {{ event?.date_fin | date}}</small></p>
+              <p><small class="text-muted">{{ event?.etat }}</small></p>
+              <p>
+                <small class="text-muted likers" [title]="getLikers(event)" >
+                  <i class="fas fa-thumbs-up"></i> {{ event.likes }}
+                </small>
+              </p>
             
               <div *ngFor="let participant of event.participants">
-                <p>Participants: {{ participant.first_name }} {{ participant.last_name }}</p>
+                <p>Participants: {{ participant?.first_name }} {{ participant?.last_name }}</p>
               </div>
         
               <div *ngFor="let comment of event.comments" class="media mt-3 border p-3 mb-5" >

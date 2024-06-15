@@ -22,15 +22,40 @@
             <p><small class="text-muted">{{ event.location }}</small></p>
             <p><small class="text-muted">Start: {{ event.date_debut | date }}</small></p>
             <p><small class="text-muted">End: {{ event.date_fin | date}}</small></p>
-
+            <p>
+              <small class="text-muted" (click)="openModal(event,content)">
+                <i class="fas fa-thumbs-up"></i> {{ event.likes }}
+              </small>
+            </p>
+            <ng-template #content let-modal>
+              <div class="modal-header justify-content-between">
+                <h4 class="modal-title" id="modal-basic-title">Likers</h4>    
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+                 <div class="modal-body">
+                   <p>{{ likers }}</p>
+                 </div>
+               </ng-template>
 
             <p><small class="text-muted">{{ event.etat }}</small></p>
             <div *ngFor="let participant of event.participants">
               <p>Participant: {{ participant.first_name }} {{ participant.last_name }}</p>
-            </div>
+            </div>  
           </div>
           </div>
         </div>
       </div>
     </div>
 </section>
+
+
+
+<!--
+<p>
+  <small class="text-muted likers" [title]="getLikers(event)" (click)="openModal(event,content)">
+    <i class="fas fa-thumbs-up"></i> {{ event.likes }}
+  </small>
+</p>
+-->

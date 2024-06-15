@@ -6,8 +6,7 @@ interface Comment {
   user: any;
   text: string;
   date: Date;
-  showReplyForm?: boolean;
-  reply?: string;
+
 }
 
 @Component({
@@ -18,6 +17,9 @@ interface Comment {
 export class EventDetailsComponent implements OnInit {
   id: any;
   event: any;
+  
+
+likers: any;
 
   constructor(private eventService: EventService, private router: Router, private route: ActivatedRoute) { }
 
@@ -28,12 +30,19 @@ export class EventDetailsComponent implements OnInit {
     });
   }
 
+  getLikers(event: { likers: any[]; }) {
+    return event.likers.map(user => `${user.first_name} ${user.last_name}`).join(', ');
+
+  }
+
 
   deleteEvent() {
     this.eventService.deleteEvent(this.id).subscribe(() => {
       this.router.navigate(['/dashboard/main']); // Redirect to the main dashboard after deletion
     });
   }
+
+
 
   
   updateEvent(updatedEvent: any) {
