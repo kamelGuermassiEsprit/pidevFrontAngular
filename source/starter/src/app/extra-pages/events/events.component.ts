@@ -18,6 +18,7 @@ likers: any;
 
 
 
+
   constructor( private eventService:EventService,private modalService: NgbModal, private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder
 
 
@@ -27,6 +28,7 @@ likers: any;
     this.eventService.getAllEvents().subscribe((res)=>{
 
       this.events=res;
+      
     
     },
     err=>{console.log(err)}
@@ -49,6 +51,8 @@ likers: any;
    this.likers = this.getLikers(event);
      this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
    }
+
+
 
 
   

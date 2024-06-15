@@ -32,6 +32,17 @@ export class EventService {
   deleteEvent(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/api/DeleteEvent/${id}`);
   }
+
+  addCommentToEvent(eventId: string, comment: { user: string, text: string }) {
+    return this.http.post(`${this.apiUrl}/api/SaveComment/${eventId}`, comment);
+  }
+
+
+  deleteCommentFromEvent(eventId: string, commentId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/api/${eventId}/comment/${commentId}`);
+  }
+
+
 }
 
 

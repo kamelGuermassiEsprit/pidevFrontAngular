@@ -34,19 +34,39 @@
                 </small>
               </p>
             
-              <div *ngFor="let participant of event.participants">
-                <p>Participants: {{ participant?.first_name }} {{ participant?.last_name }}</p>
-              </div>
-        
-              <div *ngFor="let comment of event.comments" class="media mt-3 border p-3 mb-5" >
-                <img class="mr-3 mt-1 rounded-circle"  style="border: 2px solid #000;" alt="User Image" width="60">
-                <div class="media-body">
-                  <h4 style="font-size: 0.9em;">{{ comment.user.first_name }} {{comment.user.last_name}} <small><i>Posted on {{ comment.date | date }}</i></small></h4>
-                  <p style="font-size: 0.9em;">{{ comment.text }}</p>
-                  
+              <p>Participants: {{ getParticipantNames() }}</p>
+
+              <div style="display: flex; flex-wrap: wrap;">
+                <div *ngFor="let participant of event.participants" class="card" style="max-width: 100px; max-height: 100px; margin-right: 10px;">
+                  <!-- Participant details here -->
                 </div>
               </div>
- <form (ngSubmit)="updateEvent(updateEventForm.value)" #updateEventForm="ngForm">
+                <div class="media-body">
+                  <div *ngFor="let comment of event.comments" class="media mt-3 border p-3 mb-5">
+                    <img [src]="'http://localhost:5001/' + comment.user.image" class="mr-3 mt-1 card" style="border: 2px solid #000;" alt="User Image" width="60">
+                    <div class="media-body">
+                </div>
+            
+       <h4 style="font-size: 0.9em;">
+                    {{ comment.user.first_name }} {{comment.user.last_name}} 
+                    <small><i>Posted on {{ comment.date | date }}</i></small>
+                  </h4>
+                  <p style="font-size: 0.9em;">{{ comment.text }}</p>
+                  <button type="button" class="btn btn-danger btn-sm" (click)="deleteComment(comment)">Delete</button>
+
+                 
+
+                </div>
+              </div>
+              <form class="mt-3 mb-5" (submit)="addComment(commentText.value)">
+                <div class="form-group">
+                  <input type="text" class="form-control" #commentText placeholder="Add a comment">
+                </div>
+                <button type="submit" class="btn btn-primary">Add Comment</button>
+              </form>
+
+
+ <form class="mt-3 mb-5 "(ngSubmit)="updateEvent(updateEventForm.value)" #updateEventForm="ngForm">
                 <input type="text" [value]="event.title" ngModel name="title" placeholder="Title">
                 <input type="text" [value]="event.description"ngModel name="description" placeholder="Description">
                 <input type="text" [value]="event.location" ngModel name="location" placeholder="Location">

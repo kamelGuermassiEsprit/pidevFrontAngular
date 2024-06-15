@@ -17,9 +17,10 @@ interface Comment {
 export class EventDetailsComponent implements OnInit {
   id: any;
   event: any;
-  
+  likers: any;
 
-likers: any;
+
+ 
 
   constructor(private eventService: EventService, private router: Router, private route: ActivatedRoute) { }
 
@@ -27,6 +28,7 @@ likers: any;
     this.id = this.route.snapshot.params['id'];
     this.eventService.getEventById(this.id).subscribe((event: any) => {
       this.event = event;
+      console.log(this.event.comments[0 ]);
     });
   }
 
@@ -36,6 +38,48 @@ likers: any;
   }
 
 
+
+  addComment(commentText: string) {
+    const comment = { user: '666dc519371979aac3312f13', text: commentText };  // Replace 'userId' with the actual user ID
+    this.eventService.addCommentToEvent(this.event._id, comment).subscribe(
+      (event: any) => {
+        this.event = event; 
+  
+      },
+      error => {
+        console.error('Error adding comment:', error);
+   
+
+      }
+    );
+    this.router.navigate(['/event-details', this.id]);  // Redirect to the main dashboard after updating
+
+  } 
+
+
+  deleteComment(comment: { _id: string; }) {
+    console.log(comment)
+    this.eventService.deleteCommentFromEvent(this.event._id, comment._id).subscribe(
+      response => {
+        // Remove the comment from the event.comments array
+        const index = this.event.comments.indexOf(comment);
+        if (index > -1) {
+          this.event.comments.splice(index, 1); 
+        }
+      },
+      
+      error => {
+        console.error('Error deleting comment:', error);
+      }
+      
+    );
+    this.router.navigate(['/event-details', this.id]);  // Redirect to the main dashboard after updating
+
+  }
+
+
+
+  
   deleteEvent() {
     this.eventService.deleteEvent(this.id).subscribe(() => {
       this.router.navigate(['/dashboard/main']); // Redirect to the main dashboard after deletion
@@ -54,6 +98,9 @@ likers: any;
   }
 
 
+  getParticipantNames() {
+    return this.event.participants.map((participant: { first_name: any; last_name: any; }) => `${participant.first_name} ${participant.last_name}`).join(', ');
+  }
 
 
 }
