@@ -26,6 +26,7 @@ likers: any;
 
   ngOnInit(): void {
     this.eventService.getAllEvents().subscribe((res)=>{
+ 
 
       this.events=res;
       

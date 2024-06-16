@@ -15,16 +15,20 @@
       <div *ngFor="let event of events" class="col-md-12 col-lg-8 col-xl-8 ">
         <div class="card">
           <div class="card-header">
-            <h4><a [routerLink]="['/Events/eventdetails', event._id]">{{ event.title }}</a></h4>          </div>
+            <h4><a [routerLink]="['/Events/eventdetails', event._id]">{{ event.title }}</a></h4>          
+          </div>
           <div class="card-body">
             <img [src]="'http://localhost:5001/uploads/' + event.image" alt="Event image" class="card-img-top">
             <p>{{ event.description }}</p>
             <p><small class="text-muted">{{ event.location }}</small></p>
             <p><small class="text-muted">Start: {{ event.date_debut | date }}</small></p>
             <p><small class="text-muted">End: {{ event.date_fin | date}}</small></p>
+            <p><small class="text-muted">{{ event.etat }}</small></p>
+
             <p>
               <small class="text-muted" (click)="openModal(event,content)">
-                <i class="fas fa-thumbs-up"></i> {{ event.likes }}
+                <i class="fas fa-heart fa-lg" style="color: #e20303;"></i> {{ event.likes }}
+
               </small>
             </p>
             <ng-template #content let-modal>
@@ -39,7 +43,6 @@
                  </div>
                </ng-template>
 
-            <p><small class="text-muted">{{ event.etat }}</small></p>
     
 
             

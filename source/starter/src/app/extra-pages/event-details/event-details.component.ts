@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from "../../services/event.service";
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 interface Comment {
   user: any;
@@ -19,16 +20,15 @@ export class EventDetailsComponent implements OnInit {
   event: any;
   likers: any;
 
-
+  commentsVisible = false;
  
 
-  constructor(private eventService: EventService, private router: Router, private route: ActivatedRoute) { }
+  constructor(private eventService: EventService,private modalService: NgbModal, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
     this.eventService.getEventById(this.id).subscribe((event: any) => {
       this.event = event;
-      console.log(this.event.comments[0 ]);
     });
   }
 
@@ -91,7 +91,6 @@ export class EventDetailsComponent implements OnInit {
   
   updateEvent(updatedEvent: any) {
     this.eventService.updateEvent(this.id, updatedEvent).subscribe((event: any) => {
-    console.log("dd");
       this.event = event; 
       this.router.navigate(['/event-details', this.id]);  // Redirect to the main dashboard after updating
     });
@@ -101,6 +100,12 @@ export class EventDetailsComponent implements OnInit {
   getParticipantNames() {
     return this.event.participants.map((participant: { first_name: any; last_name: any; }) => `${participant.first_name} ${participant.last_name}`).join(', ');
   }
+
+  openModal(event: { likers: any[]; }, content: any) {
+    this.likers = this.getLikers(event);
+      this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
+    }
+ 
 
 
 }

@@ -22,30 +22,48 @@
               <h4>{{ event?.title }}</h4>
             </div>
             <div class="card-body">
-              <img [src]="'http://localhost:5001/uploads/' + event?.image" alt="Event image" class="card-img-top">
+              <img [src]="'http://localhost:5001/uploads/' + event?.image" alt="Event image" class="card-img-top mb-4">
               <p>{{ event?.description }}</p>
               <p><small class="text-muted">{{ event?.location }}</small></p>
               <p><small class="text-muted">Start: {{ event?.date_debut | date }}</small></p>
               <p><small class="text-muted">End: {{ event?.date_fin | date}}</small></p>
               <p><small class="text-muted">{{ event?.etat }}</small></p>
-              <p>
-                <small class="text-muted likers" [title]="getLikers(event)" >
-                  <i class="fas fa-thumbs-up"></i> {{ event.likes }}
+              <p> Participants : <small class="text-muted">{{ getParticipantNames()}} </small>
+              <div style="display: flex; align-items: center;">
+                <small class="text-muted" (click)="openModal(event,content)">
+
+                  <i class="fas fa-heart fa-lg" style="color: #e20303;"></i> {{ event.likes }}
                 </small>
-              </p>
+                <ng-template #content let-modal>
+                  <div class="modal-header justify-content-between">
+                    <h4 class="modal-title" id="modal-basic-title">Likers</h4>    
+                    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                     <div class="modal-body">
+                       <p>{{ likers }}</p>
+                     </div>
+                   </ng-template>
+                <button (click)="commentsVisible = !commentsVisible" style="margin-left: 10px; background-color: transparent; border: none;color: #63E6BE;">
+                  <i class="fas fa-comment-dots fa-lg" style="color: #63E6BE;"></i>
+                  {{ event.comments.length }}</button>
+
+              </div>
             
-              <p>Participants: {{ getParticipantNames() }}</p>
 
               <div style="display: flex; flex-wrap: wrap;">
                 <div *ngFor="let participant of event.participants" class="card" style="max-width: 100px; max-height: 100px; margin-right: 10px;">
                   <!-- Participant details here -->
                 </div>
               </div>
+              <div *ngIf="commentsVisible">
+              
                 <div class="media-body">
                   <div *ngFor="let comment of event.comments" class="media mt-3 border p-3 mb-5">
                     <img [src]="'http://localhost:5001/' + comment.user.image" class="mr-3 mt-1 card" style="border: 2px solid #000;" alt="User Image" width="60">
                     <div class="media-body">
-                </div>
+              
             
        <h4 style="font-size: 0.9em;">
                     {{ comment.user.first_name }} {{comment.user.last_name}} 
@@ -53,39 +71,39 @@
                   </h4>
                   <p style="font-size: 0.9em;">{{ comment.text }}</p>
                   <button type="button" class="btn btn-danger btn-sm" (click)="deleteComment(comment)">Delete</button>
-
+              
+                    </div>
+                    
+                  </div>
+                  <form class="mt-3 mb-5" (submit)="addComment(commentText.value)">
+                    <div class="form-group">
+                      <input type="text" class="form-control" #commentText placeholder="Add a comment">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Comment</button>
+                  </form>
                  
 
                 </div>
               </div>
-              <form class="mt-3 mb-5" (submit)="addComment(commentText.value)">
-                <div class="form-group">
-                  <input type="text" class="form-control" #commentText placeholder="Add a comment">
-                </div>
-                <button type="submit" class="btn btn-primary">Add Comment</button>
-              </form>
 
 
- <form class="mt-3 mb-5 "(ngSubmit)="updateEvent(updateEventForm.value)" #updateEventForm="ngForm">
-                <input type="text" [value]="event.title" ngModel name="title" placeholder="Title">
-                <input type="text" [value]="event.description"ngModel name="description" placeholder="Description">
-                <input type="text" [value]="event.location" ngModel name="location" placeholder="Location">
-                <input type="datetime-local" [value]="event.date_debut" ngModel name="date_debut" placeholder="Date Debut">
-                <input type="datetime-local" [value]="event.date_fin" ngModel name="date_fin" placeholder="Date Fin">
-                <select [value]="event.etat" ngModel name="etat">
-                  <option value="" disabled selected>Select Etat</option>
-                  <option value="Ouvert">Ouvert</option>
-                  <option value="Fermé">Fermé</option>
-                  <option value="Annulé">Annulé</option>
-                </select>
-                <div></div>
-                <button type="submit" class="btn-primary mt- mr-10 mb-3">Update Event</button>
-                <button (click)="deleteEvent()" class="btn-danger mt-3">Delete Event</button>
 
-         
-           
-
-            </form>
+<form class="mt-3 mb-5" (ngSubmit)="updateEvent(updateEventForm.value)" #updateEventForm="ngForm">
+  <input type="text" [(ngModel)]="event.title" name="title" placeholder="Title">
+  <input type="text" [(ngModel)]="event.description" name="description" placeholder="Description">
+  <input type="text" [(ngModel)]="event.location" name="location" placeholder="Location">
+  <input type="datetime-local" [(ngModel)]="event.date_debut" name="date_debut" placeholder="Date Debut">
+  <input type="datetime-local" [(ngModel)]="event.date_fin" name="date_fin" placeholder="Date Fin">
+  <select [(ngModel)]="event.etat" name="etat">
+    <option value="" disabled>Select Etat</option>
+    <option value="Ouvert">Ouvert</option>
+    <option value="Fermé">Fermé</option>
+    <option value="Annulé">Annulé</option>
+  </select>
+  <div></div>
+  <button type="submit" class="btn-primary mt- mr-10 mb-3">Update Event</button>
+  <button (click)="deleteEvent()" class="btn-danger mt-3">Delete Event</button>
+</form>
 
     
 
