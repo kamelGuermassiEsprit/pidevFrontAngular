@@ -25,8 +25,15 @@ export class EventService {
     return this.http.post(this.apiUrl + '/api/SaveEvent', event);
   }
 
-  updateEvent(id: string, event: any): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/api/UpdateEvent/${id}`, event);
+  updateEvent(id: string, event: any, imageFile : File): Observable<any> {
+    const formData = new FormData();
+    Object.keys(event).forEach(key => {
+      formData.append(key, event[key]);
+    });
+    if (imageFile) {
+      formData.append('image', imageFile, imageFile.name);
+    }
+    return this.http.patch(`${this.apiUrl}/api/UpdateEvent/${id}`, formData);
   }
 
   deleteEvent(id: string): Observable<any> {

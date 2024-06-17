@@ -19,9 +19,12 @@ export class EventDetailsComponent implements OnInit {
   id: any;
   event: any;
   likers: any;
+  imageFile: File = new File([], '');
+ commentsVisible = false;
 
-  commentsVisible = false;
- 
+ onImageChange(event: any) {
+    this.imageFile = event.target.files[0];
+  }
 
   constructor(private eventService: EventService,private modalService: NgbModal, private router: Router, private route: ActivatedRoute) { }
 
@@ -90,7 +93,7 @@ export class EventDetailsComponent implements OnInit {
 
   
   updateEvent(updatedEvent: any) {
-    this.eventService.updateEvent(this.id, updatedEvent).subscribe((event: any) => {
+    this.eventService.updateEvent(this.id, updatedEvent,this.imageFile).subscribe((event: any) => {
       this.event = event; 
       this.router.navigate(['/event-details', this.id]);  // Redirect to the main dashboard after updating
     });
