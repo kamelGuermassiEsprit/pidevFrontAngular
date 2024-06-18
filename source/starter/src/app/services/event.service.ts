@@ -21,6 +21,15 @@ export class EventService {
     return this.http.get(`${this.apiUrl}/api/GetEvent/${id}`);
   }
 
+
+  searchEventByTitle(title: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/api/SearchEvent/${title}`);
+  }
+
+
+
+
+  
   createEvent(event: any): Observable<any> {
     return this.http.post(this.apiUrl + '/api/SaveEvent', event);
   }

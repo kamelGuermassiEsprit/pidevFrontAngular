@@ -14,7 +14,9 @@ export class EventsComponent implements OnInit {
 events:any ;
 likers: any;
 
-
+searchTitle: string = '';
+searchResults: any[] = [];
+searchPerformed: boolean = false;
 
 
 
@@ -41,6 +43,22 @@ likers: any;
 
 
 
+  searchEvent() {
+    if (this.searchTitle.trim() === '') {
+      this.searchPerformed = false;
+    } else {
+      this.searchPerformed = true;
+      this.eventService.searchEventByTitle(this.searchTitle).subscribe(
+        (res) => {
+          this.searchResults = res;
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    }
+  }
+  
 
 
   getLikers(event: { likers: any[]; }) {

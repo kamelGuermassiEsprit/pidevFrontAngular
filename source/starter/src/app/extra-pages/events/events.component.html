@@ -10,6 +10,48 @@
         <i class="fas fa-home font-17"></i></a>
     </li>
   </ul>
+  <li>
+    <form class="mb-3 form-inline me-auto" (submit)="searchEvent()">
+      <div class="search-element d-flex">
+        <input class="form-control" type="search" placeholder="Search" aria-label="Search" data-width="200" [(ngModel)]="searchTitle" name="searchTitle">
+        <button class="btn" type="submit">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </form>
+  </li>
+
+
+
+  <div *ngIf="searchPerformed; else showEvents">
+    <div *ngIf="searchResults.length; else noResults">
+
+
+  <div *ngFor="let result of searchResults" class="col-md-12 col-lg-8 col-xl-8 ">
+    <div class="card">
+      <div class="card-header">
+        <h4><a [routerLink]="['/Events/eventdetails', result._id]">{{ result.title }}</a></h4>          
+      </div>
+      <div class="card-body">
+        <img [src]="'http://localhost:5001/uploads/' + result.image" alt="Event image" class="card-img-top mb-3">
+        <p>{{ result.description }}</p>
+        <p><small class="text-muted">{{ result.location }}</small></p>
+        <p><small class="text-muted">Start: {{ result.date_debut | date }}</small></p>
+        <p><small class="text-muted">End: {{ result.date_fin | date}}</small></p>
+        <p><small class="text-muted">{{ result.etat }}</small></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #noResults>
+  
+  <p style="color: red; font-size: 20px; font-weight: bold; text-align: center;">No events found</p>
+</ng-template>
+</div>
+
+
+<ng-template #showEvents>
   <div class="section-body">
     <div class="row">
       <div *ngFor="let event of events" class="col-md-12 col-lg-8 col-xl-8 ">
@@ -54,6 +96,7 @@
           </div>
         </div>
       </div>
+</ng-template>
 </section>
 
 
