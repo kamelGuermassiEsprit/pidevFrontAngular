@@ -8,84 +8,100 @@ import {
   HTTP_INTERCEPTORS,
 } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
-import { delay, mergeMap, materialize, dematerialize } from 'rxjs/operators';
+import { mergeMap } from 'rxjs/operators';
 import { User } from '../models/user';
 
 const users: User[] = [
   {
-    id: 1,
-    username: 'admin@email.com',
+    id: '6645d4e605d11e5b39329d98',
+    username: 'kamel@kamel.kamel',
     password: 'admin@123',
-    firstName: 'Sarah',
-    lastName: 'Smith',
+    firstName: 'kamel',
+    lastName: 'guermassi',
+    token: 'admin-token',
+  },
+  {
+    id: '6645d5ed05d11e5b39329ddb',
+    username: 'user2@user2@user2',
+    password: 'admin@123',
+    firstName: 'user2',
+    lastName: 'lastName user2',
+    token: 'admin-token',
+  },
+  {
+    id: '666705b48ecb2131abf646ec',
+    username: 'user3@user3.user3',
+    password: 'admin@123',
+    firstName: 'user3',
+    lastName: 'lastName user3',
     token: 'admin-token',
   },
 ];
 
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
+  constructor() {} // Inject the service
+
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const { url, method, headers, body } = request;
     // wrap in delayed observable to simulate server api call
-    return of(null).pipe(mergeMap(handleRoute));
+    return of(null).pipe(mergeMap(this.handleRoute.bind(this, request, next)));
+  }
 
-    function handleRoute() {
-      switch (true) {
-        case url.endsWith('/authenticate') && method === 'POST':
-          return authenticate();
-        default:
-          // pass through any requests not handled above
-          return next.handle(request);
-      }
+  handleRoute(request: HttpRequest<any>, next: HttpHandler) {
+    const { url, method } = request;
+    switch (true) {
+      case url.endsWith('/authenticate') && method === 'POST':
+        return this.authenticate(request);
+      default:
+        // pass through any requests not handled above
+        return next.handle(request);
+    }
+  }
+
+  authenticate(request: HttpRequest<any>) {
+    const { body } = request;
+    const { username, password } = body;
+    const user = users.find(
+      (x) => x.username === username && x.password === password
+    );
+
+    if (!user) {
+      return this.error('Username or password is incorrect');
     }
 
-    // route functions
+    return this.ok({
+      id: user.id,
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      token: user.token,
+    });
+  }
 
-    function authenticate() {
-      const { username, password } = body;
-      const user = users.find(
-        (x) => x.username === username && x.password === password
-      );
-      if (!user) {
-        return error('Username or password is incorrect');
-      }
-      return ok({
-        id: user.id,
-        username: user.username,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        token: user.token,
-      });
-    }
+  ok(body?: {
+    id: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    token: string;
+  }) {
+    return of(new HttpResponse({ status: 200, body }));
+  }
 
-    // helper functions
+  error(message: string) {
+    return throwError({ error: { message } });
+  }
 
-    function ok(body?: {
-      id: number;
-      username: string;
-      firstName: string;
-      lastName: string;
-      token: string;
-    }) {
-      return of(new HttpResponse({ status: 200, body }));
-    }
+  unauthorized() {
+    return throwError({ status: 401, error: { message: 'Unauthorised' } });
+  }
 
-    function error(message: string) {
-      return throwError({ error: { message } });
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    function unauthorized() {
-      return throwError({ status: 401, error: { message: 'Unauthorised' } });
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    function isLoggedIn() {
-      return headers.get('Authorization') === 'Bearer fake-jwt-token';
-    }
+  isLoggedIn(headers: any) {
+    return headers.get('Authorization') === 'Bearer fake-jwt-token';
   }
 }
 

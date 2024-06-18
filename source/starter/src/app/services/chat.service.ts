@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 @Injectable()
 export class ChatService {
   private url: string = 'http://localhost:5001';
-  socket: any;
+  public socket: any;
 
   constructor(private http: HttpClient) {
     this.socket = io(this.url);
@@ -19,6 +19,12 @@ export class ChatService {
     return this.http.post(
       'http://localhost:5001/nomadNest/message/addMsg',
       body
+    );
+  }
+  public sendimage(formData: any) {
+    return this.http.post(
+      'http://localhost:5001/nomadNest/message/upload',
+      formData
     );
   }
 
@@ -52,6 +58,30 @@ export class ChatService {
     this.socket.emit('loadConversationsOn', conversationObj);
     return Observable.create((observer: { next: (arg0: any) => void }) => {
       this.socket.on('loadConversations', function (msg: any) {
+        observer.next(msg);
+      });
+    });
+  }
+
+  public typing(data: any) {
+    this.socket.emit('typing', data);
+  }
+
+  public receiveTyping(): Observable<any> {
+    return Observable.create((observer: { next: (arg0: any) => void }) => {
+      this.socket.on('typing', function (msg: any) {
+        observer.next(msg);
+      });
+    });
+  }
+
+  public stopTyping() {
+    this.socket.emit('stop typing');
+  }
+
+  public receiveStopTyping(): Observable<any> {
+    return Observable.create((observer: { next: (arg0: any) => void }) => {
+      this.socket.on('stop typing', function (msg: any) {
         observer.next(msg);
       });
     });

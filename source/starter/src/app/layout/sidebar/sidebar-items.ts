@@ -61,7 +61,7 @@ export const ROUTES: RouteInfo[] = [
     path: '/dashboard/chat',
     title: 'chat',
     iconType: 'feather',
-    icon: 'trello',
+    icon: 'message-square', // or 'message-square'
     class: '',
     groupTitle: false,
     badge: '',
