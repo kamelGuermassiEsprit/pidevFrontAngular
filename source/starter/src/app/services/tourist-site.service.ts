@@ -15,6 +15,7 @@ export class TouristSiteService {
   getAllSites(): Observable<TouristSite[]> {
     return this.http.get<TouristSite[]>(this.apiUrl );
   }
+  
 
   getSitesSortedByRating(): Observable<TouristSite[]> {
     return this.http.get<TouristSite[]>(`${this.apiUrl }/sites/sortedByRating`);
@@ -32,5 +33,8 @@ export class TouristSiteService {
 
   filterSitesByCategory(category: string): Observable<TouristSite[]> {
     return this.http.get<TouristSite[]>(`${this.apiUrl }/category/${category}`);
+  }
+  createSite(formData: FormData): Observable<TouristSite> {
+    return this.http.post<TouristSite>(this.apiUrl, formData);
   }
 }

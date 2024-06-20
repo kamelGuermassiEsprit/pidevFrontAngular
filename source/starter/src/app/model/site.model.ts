@@ -4,6 +4,7 @@ export interface Review {
   siteId: string;
   rating: number;
   comment: string;
+  userName: string;
   
 }
 export interface TouristSite {

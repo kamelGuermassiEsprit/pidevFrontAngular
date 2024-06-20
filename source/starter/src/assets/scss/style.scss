@@ -54,10 +54,7 @@ $oreva-theme: mat.define-light-theme((
 
 /*                 [2. Fonts]                   				*/
 // @import "fonts/_material.scss";
-@import "fonts/fontawesome/fontawesome.scss";
-@import "fonts/fontawesome/regular.scss";
-@import "fonts/fontawesome/solid.scss";
-@import "fonts/fontawesome/brands.scss";
+
 
 /*                 [3. Common ]                   			*/
 /* Variable */
@@ -164,3 +161,4 @@ $oreva-theme: mat.define-light-theme((
 
 /*                 [8. RTL ]                       */
 // @import "rtl/rtl"; // Remove comment for RTL template
+

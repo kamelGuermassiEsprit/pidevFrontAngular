@@ -20,7 +20,7 @@ export class SiteReviewService {
   }
 
   getSiteReviewsBySiteName(siteName: string): Observable<Review[]> {
-    return this.http.get<Review[]>(`${this.apiUrl}/siteName/${siteName}`);
+    return this.http.get<Review[]>(`${this.apiUrl}/siteName/${encodeURIComponent(siteName)}`);
   }
 
   getSiteReviewsByUserId(userId: string): Observable<Review[]> {
@@ -34,4 +34,5 @@ export class SiteReviewService {
   deleteSiteReview(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+ 
 }

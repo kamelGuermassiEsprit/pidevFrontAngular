@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ChangeDetectorRef  } from '@angular/core';
 import { TouristSiteService } from '../../services/tourist-site.service';
 import { SiteReviewService } from '../../services/site-review.service';
 import { TouristSite  } from '../../model/site.model';
 import { Review  } from '../../model/review.model';
+import { UserService } from '../../services/user.service';
+
 @Component({
   selector: 'app-blank',
   templateUrl: './blank.component.html',
@@ -13,34 +15,52 @@ export class BlankComponent implements OnInit {
   selectedCategory: string = '';
   sites: TouristSite[] = [];
   noSitesFound: boolean = false;
+  showCommentsMap: Map<string, boolean> = new Map();
 
   currentRatingMap: Map<string, number> = new Map();
   reviewMap: Map<string, { comment: string }> = new Map();
+  userNamesMap: Map<string, string> = new Map(); // Map for storing user names
 
   newReview: Review = {
     _id: '',
-    userId: '6645d659587b926668ca3365', 
+    userId: '6645d659587b926668ca3365',
     siteId: '',
     rating: 0,
-    comment: ''
-  
+    comment: '',
+    userName: ''
   };
 
   constructor(
     private touristSiteService: TouristSiteService,
-    private siteReviewService: SiteReviewService 
+    private siteReviewService: SiteReviewService,
+  
+   
   ) { }
 
   ngOnInit(): void {
     this.fetchSites();
+  }
+  reloadPage():void {
+    window.location.reload();
   }
 
   fetchSites(): void {
     this.touristSiteService.getAllSites().subscribe((data: TouristSite[]) => {
       this.sites = data;
       console.log(data);
+      this.sites.forEach(site => {
+        this.fetchReviews(site);
+      });
     });
   }
+  
+fetchReviews(site: TouristSite): void {
+  this.siteReviewService.getSiteReviewsBySiteName(site.name).subscribe((reviews: Review[]) => {
+    // Assign the fetched reviews to the site
+    site.reviews = reviews;
+  });
+}
+
   searchSites(name: string): void {
     this.touristSiteService.searchSites(name).subscribe((data: TouristSite[]) => {
       console.log('Search results:', data); // Debugging line
@@ -71,11 +91,11 @@ export class BlankComponent implements OnInit {
   submitReview(site: TouristSite): void {
     const newReview: Review = {
       _id: '',
-      userId: '6645d659587b926668ca3365', // replace with actual user ID
+      userId: '6672a6029aa4d3d8e92d1ee1', // replace with actual user ID
       siteId: site._id,
       rating: this.currentRatingMap.get(site._id) || 0,
-      comment: this.reviewMap.get(site._id)?.comment || ''
-     
+      comment: this.reviewMap.get(site._id)?.comment || '',
+      userName: ''
     };
 
     this.siteReviewService.createSiteReview(site.name, newReview).subscribe({
@@ -83,11 +103,16 @@ export class BlankComponent implements OnInit {
         console.log('Review submitted:', review);
         this.currentRatingMap.set(site._id, 0);
         this.reviewMap.set(site._id, { comment: '' });
+        
+        
       },
       error: (error) => {
         console.error('Error submitting review:', error);
       }
     });
+  }
+  toggleComments(siteId: string): void {
+    this.showCommentsMap.set(siteId, !this.showCommentsMap.get(siteId));
   }
 
   generateTicket(site: TouristSite): void {

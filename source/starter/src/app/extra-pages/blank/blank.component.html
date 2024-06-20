@@ -11,10 +11,12 @@
   </ul>
   <div class="section-body">
     <div class="row mb-3">
-      <div class="col-md-6">
-        <input #searchBox type="text" class="form-control" placeholder="Rechercher un site">
-        <button lass="form-control" (click)="searchSites(searchBox.value)">Recherche</button>
-          
+      <div class="search-container">
+        <input #searchBox type="text" class="form-control search-input" placeholder="Rechercher un site" (keyup.enter)="searchSites(searchBox.value)">
+        <i class="fa fa-search search-icon" (click)="searchSites(searchBox.value)"></i>
+      
+</div>
+
       <div *ngIf="noSitesFound">No sites found.</div>
       <div class="col-md-6">
         <select class="form-control" [(ngModel)]="selectedCategory" (change)="filterSitesByCategory()">
@@ -51,7 +53,26 @@
                         [ngModel]="reviewMap.get(site._id)?.comment || ''"
                         (ngModelChange)="updateComment(site._id, $event)" 
                         placeholder="Write your comment..."></textarea>
-              <button class="btn btn-primary mt-2" (click)="submitReview(site)">Submit Review</button>
+              <button class="btn btn-primary mt-2"  (click)="submitReview(site);reloadPage()">Submit Review</button>
+              <button class="btn btn-secondary mt-2" (click)="toggleComments(site._id)">
+                {{ showCommentsMap.get(site._id) ? 'Hide Comments' : 'Show Comments' }}
+              </button>
+              <div *ngIf="showCommentsMap.get(site._id)" class="existing-reviews">
+                <h5>Reviews</h5>
+                <div *ngFor="let review of site.reviews">
+                  <p class="review-header">
+                    <strong>{{ review.userName }} </strong>
+                      <span class="rating">
+                        <span *ngFor="let star of [1, 2, 3, 4, 5]" 
+                              [ngClass]="{'filled': star <= review.rating}">
+                          &#9733;
+                        </span>
+                    </span> <!-- Display user name -->
+                    </p>
+                  <p class="review-comment">{{ review.comment }}</p>
+                  
+                </div>
+              </div>
             </div>
           </div>
         </div>
