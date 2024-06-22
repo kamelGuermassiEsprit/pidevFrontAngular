@@ -3,7 +3,7 @@ import { TouristSiteService } from '../../services/tourist-site.service';
 import { SiteReviewService } from '../../services/site-review.service';
 import { TouristSite  } from '../../model/site.model';
 import { Review  } from '../../model/review.model';
-import { UserService } from '../../services/user.service';
+
 
 @Component({
   selector: 'app-blank',
@@ -16,7 +16,6 @@ export class BlankComponent implements OnInit {
   sites: TouristSite[] = [];
   noSitesFound: boolean = false;
   showCommentsMap: Map<string, boolean> = new Map();
-
   currentRatingMap: Map<string, number> = new Map();
   reviewMap: Map<string, { comment: string }> = new Map();
   userNamesMap: Map<string, string> = new Map(); // Map for storing user names

@@ -38,7 +38,7 @@
             <p>Category: {{ site.category }}</p>
             <p>Average Rating: {{ site.average_rating }}</p>
             <div *ngIf="site.photos.length > 0">
-              <img [src]="site.photos[0]" alt="{{ site.name }}" class="img-fluid">
+              <img [src]= "'http://localhost:5001/' + site.photos[0]" alt="{{ site.name }}" class="img-fluid"style="width: 200px; height: auto;">
             </div>
             <div class="review-section">
               <h5>Leave a Review</h5>
@@ -67,7 +67,7 @@
                               [ngClass]="{'filled': star <= review.rating}">
                           &#9733;
                         </span>
-                    </span> <!-- Display user name -->
+                    </span> 
                     </p>
                   <p class="review-comment">{{ review.comment }}</p>
                   
