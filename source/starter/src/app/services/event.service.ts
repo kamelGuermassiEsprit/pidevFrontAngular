@@ -22,6 +22,8 @@ export class EventService {
   }
 
 
+  
+
   searchEventByTitle(title: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/api/SearchEvent/${title}`);
   }

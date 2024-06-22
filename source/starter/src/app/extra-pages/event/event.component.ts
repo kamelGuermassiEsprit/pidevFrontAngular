@@ -2,6 +2,9 @@ import { Component,OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import{EventService} from "../../services/event.service"
+import { getNames } from 'country-list';
+import axios from 'axios';
+
 
 @Component({
   selector: 'app-event',
@@ -9,15 +12,20 @@ import{EventService} from "../../services/event.service"
   styleUrls: ['./event.component.scss']
 })
 export class EventComponent implements OnInit {
+  countries = getNames();
+  cities = [];
+  
+  
 
   event = {
     title:'',
     description:'',
     location:'',
+    country: '',
+    city: '',
     date_debut: new Date(),
     date_fin: new Date(),
     etat:''
-
   }
 
 
@@ -45,6 +53,8 @@ CreateEvent() {
   fd.append('title', this.event.title);
   fd.append('description', this.event.description);
   fd.append('location', this.event.location);
+  fd.append('country', this.event.country);
+  fd.append('city', this.event.city);
 
   let date_debut_local = new Date(this.event.date_debut).toLocaleString();
   let date_fin_local = new Date(this.event.date_fin).toLocaleString();
@@ -59,6 +69,21 @@ CreateEvent() {
     this.router.navigate(['/dashboard/main'])
   });
 }
+
+
+
+
+async updateCities(countryName: string) {
+  try {
+    const response = await axios.get(`http://localhost:5001/nomadNest/events/api/GetCountriesAndCities`);
+    const countryAndCities = response.data.find((item: { country: string; }) => item.country === countryName);
+    this.cities = countryAndCities ? countryAndCities.cities : [];
+  } catch (error) {
+    console.error(error); 
+  }
+}
+
+
 }
 
 

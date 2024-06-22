@@ -35,9 +35,13 @@
       <div class="card-body">
         <img [src]="'http://localhost:5001/uploads/' + result.image" alt="Event image" class="card-img-top mb-3">
         <p>{{ result.description }}</p>
-        <p><small class="text-muted">{{ result.location }}</small></p>
-        <p><small class="text-muted">Start: {{ result.date_debut | date }}</small></p>
-        <p><small class="text-muted">End: {{ result.date_fin | date}}</small></p>
+        <p><small class="text-muted">country : {{result.country}}</small></p>
+        <p><small class="text-muted">City : {{ result.city }}</small>
+        <p><small class="text-muted">location : {{ result.location }}</small></p>
+
+
+        <p><small class="text-muted">Start: {{ result?.date_debut | date:'d MMMM y, h:mm a' }}</small></p>
+        <p><small class="text-muted">End: {{ result?.date_fin | date:'d MMMM y, h:mm a' }}</small></p>
         <p><small class="text-muted">{{ result.etat }}</small></p>
       </div>
     </div>
@@ -62,9 +66,12 @@
           <div class="card-body">
             <img [src]="'http://localhost:5001/uploads/' + event.image" alt="Event image" class="card-img-top mb-3">
             <p>{{ event.description }}</p>
-            <p><small class="text-muted">{{ event.location }}</small></p>
-            <p><small class="text-muted">Start: {{ event.date_debut | date }}</small></p>
-            <p><small class="text-muted">End: {{ event.date_fin | date}}</small></p>
+            <p><small class="text-muted">Country : {{event.country}}</small></p>
+            <p><small class="text-muted">City : {{event.city}}</small> </p>
+            <p><small class="text-muted">location : {{ event.location }}</small></p>
+
+            <p><small class="text-muted">Start: {{ event?.date_debut | date:'d MMMM y, h:mm a' }}</small></p>
+            <p><small class="text-muted">End: {{ event?.date_fin | date:'d MMMM y, h:mm a' }}</small></p>
             <p><small class="text-muted">{{ event.etat }}</small></p>
 
             <p>

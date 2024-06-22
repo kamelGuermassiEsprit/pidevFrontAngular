@@ -19,45 +19,110 @@
               <h4>Event Management</h4>
             </div>
             <div class="card-body">
+
+
+              
               <!-- Add content here -->
 
-              <form (ngSubmit)="CreateEvent()" class="form-group">
+              <form (ngSubmit)="CreateEvent()" class="form-group" #eventForm="ngForm">
                 <div class="mb-3">
                   <label for="title" class="form-label">Title</label>
-                  <input id="title" [(ngModel)]="event.title" name="title" class="form-control" />
+                  <input id="title" [(ngModel)]="event.title" name="title" class="form-control"  required #title ="ngModel"/>
+                  <div *ngIf="title.invalid && (title.dirty || title.touched || eventForm.submitted)" class="alert alert-danger form" >
+                  <div *ngIf="title.errors?.['required']">
+                      Title is required
+                    </div>
+                  </div>
                 </div>
                 <div class="mb-3">
                   <label for="description" class="form-label">Description</label>
-                  <input id="description" [(ngModel)]="event.description" name="description" class="form-control" />
-                </div>
-                <div class="mb-3">
-                  <label for="location" class="form-label">Location</label>
-                  <input id="location" [(ngModel)]="event.location" name="location" class="form-control" />
+                  <input id="description" [(ngModel)]="event.description" name="description" class="form-control" required #description="ngModel" />
+                  <div *ngIf="description.invalid && (description.dirty || description.touched || eventForm.submitted)" class="alert alert-danger form">
+                    <div *ngIf="description.errors?.['required']">
+                      Description is required
+                    </div>
+                  </div>
                 </div>
 
                 <div class="mb-3">
+                  <label for="country" class="form-label">Country</label>
+                  <select id="country" [(ngModel)]="event.country" name="country" class="form-control" required #country="ngModel" (change)="updateCities(event.country)">
+                    <option *ngFor="let country of countries" [value]="country">{{country}}</option>
+                  </select>
+                  <div *ngIf="country.invalid && (country.dirty || country.touched || eventForm.submitted)" class="alert alert-danger form" >
+                    <div *ngIf="country.errors?.['required']">
+                      Country is required
+                    </div>
+                  </div>
+                </div>
+             
+                <div class="mb-3">
+                  <label for="city" class="form-label">City</label>
+                  <select id="city" [(ngModel)]="event.city" name="city" class="form-control" required #city="ngModel">
+                    <option *ngFor="let city of cities" [value]="city">{{city}}</option>
+                  </select>
+                    <div *ngIf="city.invalid && (city.dirty || city.touched || eventForm.submitted)" class="alert alert-danger form">
+                    <div *ngIf="city.errors?.['required']">
+                      City is required
+                    </div>
+                  </div>
+                </div>
+
+        
+          
+
+                <div class="mb-3">
+                  <label for="location" class="form-label">Location</label>
+                  <input id="location" [(ngModel)]="event.location" name="location" class="form-control" required #location="ngModel" />
+                  <div *ngIf="location.invalid && (location.dirty || location.touched || eventForm.submitted)" class="alert alert-danger form">
+                    <div *ngIf="location.errors?.['required']">
+                      Location is required
+                    </div>
+                  </div>
+                </div>
+          
+
+                <div class="mb-3">
                   <label for="date_debut" class="form-label">Date Debut</label>
-                  <input type="datetime-local" id="date_debut" [(ngModel)]="event.date_debut" name="date_debut" class="form-control" />
+                  <input type="datetime-local" id="date_debut" [(ngModel)]="event.date_debut" name="date_debut" class="form-control" required #date_debut="ngModel" />
+                  <div *ngIf="date_debut.invalid && (date_debut.dirty || date_debut.touched || eventForm.submitted)" class="alert alert-danger form">
+                    <div *ngIf="date_debut.errors?.['required']">
+                      Date Debut is required
+                    </div>
+                  </div>
               </div>
 
               <div class="mb-3">
                 <label for="date_fin" class="form-label">Date Fin</label>
-                <input type="datetime-local" id="date_fin" [(ngModel)]="event.date_fin" name="date_fin" class="form-control" />
+                <input type="datetime-local" id="date_fin" [(ngModel)]="event.date_fin" name="date_fin" class="form-control" required #date_fin="ngModel"/>
+                <div *ngIf="date_fin.invalid && (date_fin.dirty || date_fin.touched || eventForm.submitted)" class="alert alert-danger form">
+                  <div *ngIf="date_fin.errors?.['required']">
+                    Date Fin is required
+                  </div>
+                </div>
             </div>
 
 
             <div class="mb-3">
               <label for="etat" class="form-label">Etat</label>
-              <select id="etat" [(ngModel)]="event.etat" name="etat" class="form-control stylish-select">
+              <select id="etat" [(ngModel)]="event.etat" name="etat" class="form-control stylish-select" required #etat="ngModel">
+            
+
                 <option value="Ouvert">Ouvert</option>
                 <option value="Fermé">Fermé</option>
                 <option value="Annulé">Annulé</option>
+
               </select>
+              <div *ngIf="etat.invalid && (etat.dirty || etat.touched || eventForm.submitted)" class="alert alert-danger form">
+                <div *ngIf="etat.errors?.['required']">
+                  Etat is required
+                </div>
+              </div>
             </div>
               
                 <div class="mb-3">
                   <label for="image" class="form-label">Image</label>
-                  <input type="file" (change)="select($event)" class="form-control m-1" placeholder="Upload file">
+                  <input type="file" (change)="select($event)" class="form-control m-1" style="width: auto;" placeholder="Upload file">
                 </div>
                 <!-- Add more fields as needed -->
                 <button type="submit" class="btn btn-primary">Create Event</button>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from "../../services/event.service";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { getNames } from 'country-list';
 
 interface Comment {
   user: any;
@@ -21,6 +22,7 @@ export class EventDetailsComponent implements OnInit {
   likers: any;
   imageFile: File = new File([], '');
  commentsVisible = false;
+ countries = getNames();
 
  onImageChange(event: any) {
     this.imageFile = event.target.files[0];
