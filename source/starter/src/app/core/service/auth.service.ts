@@ -24,21 +24,22 @@ export class AuthService {
   }
 
   login(username: string, password: string) {
-    return this.http
-      .post<User>(`${environment.apiUrl}/authenticate`, {
-        username,
-        password,
+    return this.http.post<User>(`${environment.apiUrl}/user/login`, {
+      email: username,  // Assuming 'username' is the email
+      passwordHash: password,
+    }).pipe(
+      map((user) => {
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        this.currentUserSubject.next(user);
+        return user;
       })
-      .pipe(
-        map((user) => {
-          // store user details and jwt token in local storage to keep user logged in between page refreshes
-          // console.log(JSON.stringify(user));
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          this.currentUserSubject.next(user);
-          return user;
-        })
-      );
+    );
   }
+  
+  verifyEmail(data: { email: string, verificationCode: string }): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/user/verify-email`, data);
+  }
+  
 
   logout() {
     // remove user from local storage to log user out

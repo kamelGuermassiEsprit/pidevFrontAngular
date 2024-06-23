@@ -18,16 +18,21 @@
                   <div class="form-group position-relative">
                     <label>First name <span class="text-danger">*</span></label>
                     <i-feather name="user" class="login-icons"></i-feather>
-                    <input type="text" class="form-control psl-5" formControlName="fname" placeholder="First Name"
-                      required>
+                    <input type="text" class="form-control psl-5" formControlName="fname" placeholder="First Name" required>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group position-relative">
                     <label>Last name <span class="text-danger">*</span></label>
                     <i-feather name="user-check" class="login-icons"></i-feather>
-                    <input type="text" class="form-control psl-5" formControlName="lname" placeholder="Last Name"
-                      required>
+                    <input type="text" class="form-control psl-5" formControlName="lname" placeholder="Last Name" required>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group position-relative">
+                    <label>Username <span class="text-danger">*</span></label>
+                    <i-feather name="user" class="login-icons"></i-feather>
+                    <input type="text" class="form-control psl-5" formControlName="user_name" placeholder="Username" required>
                   </div>
                 </div>
                 <div class="col-md-12">
@@ -41,8 +46,17 @@
                   <div class="form-group position-relative">
                     <label>Password <span class="text-danger">*</span></label>
                     <i-feather name="key" class="login-icons"></i-feather>
-                    <input type="password" class="form-control psl-5" formControlName="password" placeholder="Password"
-                      required>
+                    <input type="password" class="form-control psl-5" formControlName="password" placeholder="Password" required>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group position-relative">
+                    <label>Role <span class="text-danger">*</span></label>
+                    <i-feather name="users" class="login-icons"></i-feather>
+                    <select class="form-control psl-5" formControlName="role" required>
+                      <option value="user">User</option>
+                      <option value="admin">Admin</option>
+                    </select>
                   </div>
                 </div>
                 <div class="col-md-12">
@@ -56,6 +70,7 @@
                   </div>
                 </div>
                 <div *ngIf="error" class="alert alert-danger mb-3 msl-3">{{error}}</div>
+                <div *ngIf="successMessage" class="alert alert-success mb-3 msl-3">{{successMessage}}</div>
                 <div class="col-md-12">
                   <button class="btn btn-primary auth-form-btn" [disabled]="registerForm.invalid">Register</button>
                 </div>
@@ -77,8 +92,7 @@
                   </ul>
                 </div>
                 <div class="mx-auto">
-                  <p class="mb-0 mt-3"><small class="text-dark msr-2">Already have an account ?</small> <a
-                      routerLink="/authentication/signin" class="text-dark fw-bold">Sign in</a></p>
+                  <p class="mb-0 mt-3"><small class="text-dark msr-2">Already have an account ?</small> <a routerLink="/authentication/signin" class="text-dark fw-bold">Sign in</a></p>
                 </div>
               </div>
             </form>

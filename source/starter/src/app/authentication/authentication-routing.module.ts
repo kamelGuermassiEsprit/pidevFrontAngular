@@ -1,3 +1,4 @@
+
 import { ResetComponent } from './reset/reset.component';
 import { Page500Component } from './page500/page500.component';
 import { Page404Component } from './page404/page404.component';
@@ -6,6 +7,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { SigninComponent } from './signin/signin.component';
 import { SignupComponent } from './signup/signup.component';
+import { EmailVerificationComponent } from './email-verification/email-verification.component';
 const routes: Routes = [
   {
     path: '',
@@ -35,6 +37,10 @@ const routes: Routes = [
   {
     path: 'page500',
     component: Page500Component,
+  },
+  {
+    path: 'email-verification',
+    component: EmailVerificationComponent,
   },
 ];
 @NgModule({
