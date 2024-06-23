@@ -46,6 +46,17 @@ export const ROUTES: RouteInfo[] = [
     ],
   },
   {
+    path: '/dashboard/accueil',
+    title: 'accueil',
+    iconType: 'feather',
+    icon: 'trello',
+    class: '',
+    groupTitle: false,
+    badge: '',
+    badgeClass: '',
+    submenu: [],
+  },
+  {
     path: 'advance-table',
     title: 'MENUITEMS.ADVANCE-TABLE.TEXT',
     iconType: 'feather',

@@ -13,8 +13,11 @@ import { ChatComponent } from './chat/chat.component';
 import { ChatService } from '../services/chat.service';
 import { FormsModule } from '@angular/forms';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { AccueilComponent } from './accueil/accueil.component';
+
+
 @NgModule({
-  declarations: [MainComponent, Dashboard2Component, ChatComponent],
+  declarations: [MainComponent, Dashboard2Component, ChatComponent, AccueilComponent],
   imports: [
     CommonModule,
     NgbModule,

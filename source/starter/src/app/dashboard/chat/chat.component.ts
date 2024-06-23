@@ -7,6 +7,12 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./chat.component.scss'],
 })
 export class ChatComponent implements OnInit {
+uploadPhoto() {
+throw new Error('Method not implemented.');
+}
+onFileSelected($event: Event) {
+throw new Error('Method not implemented.');
+}
   data: any;
   msg: any;
   msgs: any;
