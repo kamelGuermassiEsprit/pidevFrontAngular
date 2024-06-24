@@ -10,10 +10,13 @@ export class ListingService {
 
   constructor(private http: HttpClient) {}
 
-  getAllListings(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/listing/getAllListings`);
+  getAllListings(country?: string): Observable<any> {
+    let url = `${this.apiUrl}/listing/getAllListings`;
+    if (country) {
+      url += `?country=${country}`;
+    }
+    return this.http.get(url);
   }
-
   getAvailableListings(country?: string): Observable<any> {
     let url = `${this.apiUrl}/listing/getAvailableListings`;
     if (country) {

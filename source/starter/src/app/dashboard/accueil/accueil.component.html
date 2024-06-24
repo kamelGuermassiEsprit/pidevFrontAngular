@@ -1,24 +1,49 @@
-<div *ngIf="listings.length > 0; else noListings">
-  <h2>Listings</h2>
-  <ul class="list-group">
-    <li *ngFor="let listing of listings" class="list-group-item mb-4">
-      <h3 class="listing-title">{{ listing.title }}</h3>
-      <p class="listing-description">{{ listing.description }}</p>
-      <div *ngIf="listing.photos && listing.photos.length > 0">
-        <h5>Photos:</h5>
-        <div class="row">
-          <div *ngFor="let photo of listing.photos" class="col-md-3 mb-3">
-            <img [src]="photo" alt="Listing Photo" class="img-fluid">
-          </div>
-        </div>
-      </div>
-      <p class="listing-address"><strong>Address:</strong> {{ listing.address }}</p>
-      <p *ngIf="listing.ratings && listing.ratings.length > 0" class="mb-0">
-        <strong>Average Rating:</strong> {{ calculateAverageRating(listing.ratings) | number: '1.1-1' }}
-      </p>
+<section class="main-content">
+  <ul class="breadcrumb breadcrumb-style ">
+    <li class="breadcrumb-item">
+      <h5 class="page-title m-b-0">Houses</h5>
+    </li>
+    <li class="breadcrumb-item">Houses</li>
+    <li class="breadcrumb-item bcrumb-1">
+      <a routerLink="/dashboard/main">
+        <i class="fas fa-home font-17"></i>
+      </a>
     </li>
   </ul>
-</div>
-<ng-template #noListings>
-  <p>No listings available.</p>
-</ng-template>
+  <div>
+    <form class="mb-3 form-inline me-auto" (ngSubmit)="onSearch()">
+      <div class="search-element d-flex">
+        <input class="form-control" type="search" placeholder="Search by Country" aria-label="Search" [(ngModel)]="searchTitle" name="searchTitle">
+        <button class="btn" type="submit">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+  <div *ngIf="listings.length > 0; else noListings">
+    <h2>Listings</h2>
+    <ul class="list-group">
+      <li *ngFor="let listing of listings" class="list-group-item mb-4">
+        <h3 class="listing-title">{{ listing.title }}</h3>
+        <p class="listing-description">{{ listing.description }}</p>
+        <div *ngIf="listing.photos && listing.photos.length > 0">
+          <h5>Photos:</h5>
+          <div class="row">
+            <div *ngFor="let photo of listing.photos" class="col-md-3 mb-3">
+              <img [src]="photo" alt="Listing Photo" class="img-fluid" />
+            </div>
+          </div>
+        </div>
+        <p class="listing-address">
+          <strong>Address:</strong> {{ listing.address }}
+        </p>
+        <p *ngIf="listing.ratings && listing.ratings.length > 0" class="mb-0">
+          <strong>Average Rating:</strong> {{ calculateAverageRating(listing.ratings) | number: '1.1-1' }}
+        </p>
+      </li>
+    </ul>
+  </div>
+  <ng-template #noListings>
+    <p>No listings available.</p>
+  </ng-template>
+</section>

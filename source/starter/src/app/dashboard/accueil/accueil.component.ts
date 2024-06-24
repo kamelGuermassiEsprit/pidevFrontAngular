@@ -10,24 +10,28 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 export class AccueilComponent implements OnInit {
   listings: any[] = [];
 
+  searchTitle = '';
+
+
   constructor(private listingService: ListingService,private sanitizer: DomSanitizer) {}
 
+  
+
+ 
   ngOnInit(): void {
     this.getAllListings();
   }
 
-  getAllListings(): void {
-    this.listingService.getAllListings().subscribe(
+  getAllListings(country?: string): void {
+    this.listingService.getAllListings(country).subscribe(
       (data) => {
-        
-        
-        data.forEach((item:any) => {
-          item.photos = item.photos.map((photo:any) => {
-            photo =   this.sanitizer.bypassSecurityTrustUrl(`data:image/jpeg;base64,${photo}`)
+        data.forEach((item: any) => {
+          item.photos = item.photos.map((photo: any) => {
+            photo = this.sanitizer.bypassSecurityTrustUrl(`data:image/jpeg;base64,${photo}`);
             return photo;
           });
         });
-      
+
         this.listings = data;
         console.log('Listings fetched successfully:', this.listings);
       },
@@ -43,5 +47,9 @@ export class AccueilComponent implements OnInit {
     }
     const sum = ratings.reduce((a, b) => a + b, 0);
     return sum / ratings.length;
+  }
+
+  onSearch(): void {
+    this.getAllListings(this.searchTitle);
   }
 }

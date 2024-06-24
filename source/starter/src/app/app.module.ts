@@ -31,6 +31,7 @@ import {
   HttpClient,
 } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ListingManagementComponent } from './listing-management/listing-management.component';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -46,6 +47,7 @@ export function createTranslateLoader(http: HttpClient) {
     AuthLayoutComponent,
     MainLayoutComponent,
     FooterComponent,
+    ListingManagementComponent,
   ],
   imports: [
     BrowserModule,
