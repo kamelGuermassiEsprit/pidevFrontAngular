@@ -32,7 +32,9 @@
         <div class="card">
           <div class="card-header">
             <h4>{{ site.name }}</h4>
+            <mat-icon (click)="openTicketModal(site)">confirmation_number</mat-icon>
           </div>
+          
           <div class="card-body">
             <p>{{ site.description }}</p>
             <p>Category: {{ site.category }}</p>
@@ -74,7 +76,7 @@
                 </div>
               </div>
             </div>
-            <button (click)="openTicketModal(site)" class="btn btn-primary mt-2">Generate Ticket</button>
+            
           </div>
         </div>
       </div>
@@ -86,6 +88,7 @@
         <div class="modal-header">
           <h5 class="modal-title">Generate Ticket</h5>
           <button type="button" class="close" (click)="closeTicketModal()" aria-label="Close">
+            
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -100,7 +103,7 @@
               <input type="email" class="form-control" id="email" [(ngModel)]="ticketForm.email" name="email">
             </div>
             <button type="submit" class="btn btn-primary">Generate Ticket</button>
-          </form>
+           </form>
         </div>
       </div>
     </div>

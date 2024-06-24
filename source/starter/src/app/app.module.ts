@@ -20,6 +20,7 @@ import { fakeBackendProvider } from './core/interceptor/fake-backend';
 import { ErrorInterceptor } from './core/interceptor/error.interceptor';
 import { JwtInterceptor } from './core/interceptor/jwt.interceptor';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { MatIconModule } from '@angular/material/icon';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -55,6 +56,7 @@ export function createTranslateLoader(http: HttpClient) {
     ReactiveFormsModule,
     NgScrollbarModule,
     FormsModule,
+    MatIconModule,
     LoadingBarRouterModule,
     TranslateModule.forRoot({
       loader: {
