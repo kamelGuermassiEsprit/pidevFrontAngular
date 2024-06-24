@@ -3,6 +3,8 @@ import { TouristSiteService } from '../../services/tourist-site.service';
 import { SiteReviewService } from '../../services/site-review.service';
 import { TouristSite  } from '../../model/site.model';
 import { Review  } from '../../model/review.model';
+import { TicketService } from '../../services/ticket-service.service';  // Import the ticket service
+import { saveAs } from 'file-saver'; // Import file-saver for handling downloads
 
 
 @Component({
@@ -19,6 +21,9 @@ export class BlankComponent implements OnInit {
   currentRatingMap: Map<string, number> = new Map();
   reviewMap: Map<string, { comment: string }> = new Map();
   userNamesMap: Map<string, string> = new Map(); // Map for storing user names
+  showTicketModal: boolean = false;
+  selectedSite: TouristSite | null = null;
+  ticketForm: { name: string, email?: string } = { name: '', email: '' };
 
   newReview: Review = {
     _id: '',
@@ -32,6 +37,7 @@ export class BlankComponent implements OnInit {
   constructor(
     private touristSiteService: TouristSiteService,
     private siteReviewService: SiteReviewService,
+    private ticketService: TicketService,
   
    
   ) { }
@@ -114,11 +120,42 @@ fetchReviews(site: TouristSite): void {
     this.showCommentsMap.set(siteId, !this.showCommentsMap.get(siteId));
   }
 
-  generateTicket(site: TouristSite): void {
-    // Implement ticket generation logic here
+  openTicketModal(site: TouristSite): void {
+    this.selectedSite = site;
+    this.showTicketModal = true;
   }
 
-  viewOnMap(site: TouristSite): void {
-    // Implement view on map logic here
+  closeTicketModal(): void {
+    this.showTicketModal = false;
+  }
+
+  submitTicketForm(): void {
+    if (this.selectedSite) {
+      const ticketData = {
+        name: this.ticketForm.name,
+        siteName: this.selectedSite.name,
+        date: new Date().toISOString().split('T')[0],
+        email: this.ticketForm.email
+      };
+
+      this.ticketService.generateTicket(ticketData).subscribe({
+        next: (response) => {
+          if (this.ticketForm.email) {
+            alert('Ticket generated and sent to your email');
+          } else {
+            const blob = new Blob([response], { type: 'application/pdf' });
+            saveAs(blob, 'ticket.pdf');
+          }
+          this.closeTicketModal();
+        },
+        error: (error) => {
+          console.error('Error generating ticket:', error);
+          alert('Error generating ticket');
+        }
+      });
+    }
   }
 }
+
+ 
+

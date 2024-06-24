@@ -74,7 +74,33 @@
                 </div>
               </div>
             </div>
+            <button (click)="openTicketModal(site)" class="btn btn-primary mt-2">Generate Ticket</button>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{'show': showTicketModal}" style="display: {{showTicketModal ? 'block' : 'none'}};">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Generate Ticket</h5>
+          <button type="button" class="close" (click)="closeTicketModal()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="submitTicketForm()">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" class="form-control" id="name" [(ngModel)]="ticketForm.name" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email (Optional)</label>
+              <input type="email" class="form-control" id="email" [(ngModel)]="ticketForm.email" name="email">
+            </div>
+            <button type="submit" class="btn btn-primary">Generate Ticket</button>
+          </form>
         </div>
       </div>
     </div>
