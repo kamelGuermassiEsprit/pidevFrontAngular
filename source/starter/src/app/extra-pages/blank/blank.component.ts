@@ -27,6 +27,9 @@ export class BlankComponent implements OnInit {
   ticketForm: { name: string, email?: string } = { name: '', email: '' };
   map: any;
   selectedCoordinates: [number, number] = [0, 0];
+  showCreateSiteModal: boolean = false;
+  createSiteForm: { name: string, description: string, address: string, category: string, photos: File[] } = { name: '', description: '', address: '', category: '', photos: [] };
+
 
   newReview: Review = {
     _id: '',
@@ -62,6 +65,40 @@ export class BlankComponent implements OnInit {
       });
     });
   }
+  openCreateSiteModal(): void {
+    this.showCreateSiteModal = true;
+  }
+
+  closeCreateSiteModal(): void {
+    this.showCreateSiteModal = false;
+  }
+
+  onFileChange(event: any): void {
+    this.createSiteForm.photos = event.target.files;
+  }
+
+  submitCreateSiteForm(): void {
+    const formData = new FormData();
+    formData.append('name', this.createSiteForm.name);
+    formData.append('description', this.createSiteForm.description);
+    formData.append('address', this.createSiteForm.address);
+    formData.append('category', this.createSiteForm.category);
+    for (let photo of this.createSiteForm.photos) {
+      formData.append('photos', photo);
+    }
+
+    this.touristSiteService.createTouristSite(formData).subscribe({
+      next: (response) => {
+        console.log('Tourist site created:', response);
+        this.closeCreateSiteModal();
+        this.fetchSites();
+      },
+      error: (error) => {
+        console.error('Error creating tourist site:', error);
+      }
+    });
+  }
+
   
 fetchReviews(site: TouristSite): void {
   this.siteReviewService.getSiteReviewsBySiteName(site.name).subscribe((reviews: Review[]) => {
