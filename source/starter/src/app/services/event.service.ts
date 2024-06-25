@@ -60,7 +60,9 @@ export class EventService {
     return this.http.delete(`${this.apiUrl}/api/${eventId}/comment/${commentId}`);
   }
 
-
+  likeEvent(id: string, user: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/api/LikeEvent/${id}`, { user });
+  }
 }
 
 

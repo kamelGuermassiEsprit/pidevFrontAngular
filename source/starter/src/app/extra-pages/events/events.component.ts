@@ -72,7 +72,28 @@ searchPerformed: boolean = false;
    }
 
 
-
+   likeEvent(event: any, userId: string) {
+    this.eventService.likeEvent(event._id, userId).subscribe(
+      (res) => {
+        console.log(res);
+        if (res === 'Event liked') {
+          // The event was liked
+          event.likes += 1;
+          event.likers.push(userId);
+        } else if (res === 'Event unliked') {
+          // The event was unliked
+          event.likes -= 1;
+          const userIndex = event.likers.indexOf(userId);
+          if (userIndex !== -1) {
+            event.likers.splice(userIndex, 1);
+          }
+        }
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
 
   
 }

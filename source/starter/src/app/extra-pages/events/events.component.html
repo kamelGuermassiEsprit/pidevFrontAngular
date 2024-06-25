@@ -43,6 +43,28 @@
         <p><small class="text-muted">Start: {{ result?.date_debut | date:'d MMMM y, h:mm a' }}</small></p>
         <p><small class="text-muted">End: {{ result?.date_fin | date:'d MMMM y, h:mm a' }}</small></p>
         <p><small class="text-muted">{{ result.etat }}</small></p>
+        
+    
+        <p>
+          <small class="text-muted" (click)="openModal(result,content)">
+            <i class="fas fa-heart fa-lg" style="color: #e20303;"></i> {{ result.likes }}
+
+          </small>
+        </p>
+        <button class="btn btn-primary" (click)="likeEvent(result, '665051098b09ea67321b1e9b')">Like</button>
+        <ng-template #content let-modal>
+          <div class="modal-header justify-content-between">
+            <h4 class="modal-title" id="modal-basic-title">Likers</h4>    
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+             <div class="modal-body">
+               <p>{{ likers }}</p>
+             </div>
+           </ng-template>
+
+        
       </div>
     </div>
   </div>
@@ -80,6 +102,8 @@
 
               </small>
             </p>
+            <button class="btn btn-primary" (click)="likeEvent(event, '665051098b09ea67321b1e9b')">Like</button>
+
             <ng-template #content let-modal>
               <div class="modal-header justify-content-between">
                 <h4 class="modal-title" id="modal-basic-title">Likers</h4>    
