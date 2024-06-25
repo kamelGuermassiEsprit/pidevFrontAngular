@@ -159,7 +159,7 @@ export const ROUTES: RouteInfo[] = [
   },
   {
     path: '',
-    title: 'Extra Pages',
+    title: 'Tourist Sites Interface',
     iconType: 'feather',
     icon: 'anchor',
     class: 'menu-toggle',
@@ -169,7 +169,7 @@ export const ROUTES: RouteInfo[] = [
     submenu: [
       {
         path: '/extra-pages/blank',
-        title: 'Blank Page',
+        title: 'Tourist Sites',
         iconType: '',
         icon: '',
         class: 'ml-menu',

@@ -5,6 +5,7 @@ import { TouristSite  } from '../../model/site.model';
 import { Review  } from '../../model/review.model';
 import { TicketService } from '../../services/ticket-service.service';  // Import the ticket service
 import { saveAs } from 'file-saver'; // Import file-saver for handling downloads
+import * as L from 'leaflet';
 
 
 @Component({
@@ -24,6 +25,8 @@ export class BlankComponent implements OnInit {
   showTicketModal: boolean = false;
   selectedSite: TouristSite | null = null;
   ticketForm: { name: string, email?: string } = { name: '', email: '' };
+  map: any;
+  selectedCoordinates: [number, number] = [0, 0];
 
   newReview: Review = {
     _id: '',
@@ -33,6 +36,7 @@ export class BlankComponent implements OnInit {
     comment: '',
     userName: ''
   };
+  showMapModal = false;
 
   constructor(
     private touristSiteService: TouristSiteService,
@@ -155,7 +159,31 @@ fetchReviews(site: TouristSite): void {
       });
     }
   }
-}
+  openMapModal(site: any): void {
+    this.selectedCoordinates = site.location.coordinates;
+    this.showMapModal = true;
+    setTimeout(() => {
+      this.initializeMap();
+    }, 0);
+  }
+
+  closeMapModal(): void {
+    this.showMapModal = false;
+  }
+
+  initializeMap(): void {
+    if (this.map) {
+      this.map.remove();
+    }
+    this.map = L.map('map').setView(this.selectedCoordinates, 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(this.map);
+    L.marker(this.selectedCoordinates).addTo(this.map)
+      .bindPopup('Selected Location')
+      .openPopup();
+  }}
+
 
  
 
