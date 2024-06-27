@@ -1,15 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+
 import { ChatService } from 'src/app/services/chat.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { NgScrollbar } from 'ngx-scrollbar'; // Import the NgScrollbar
+import { ChangeDetectorRef } from '@angular/core';
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
 })
 export class ChatComponent implements OnInit {
+  @ViewChild('scrollable', { static: false }) scrollable!: NgScrollbar;
   data: any;
   msg: any;
+  msgSearch: any;
   msgs: any;
   showDeleteButtons = false;
   showTranslateButtons = false;
@@ -29,15 +34,20 @@ export class ChatComponent implements OnInit {
   constructor(
     private chatService: ChatService,
     private modalService: NgbModal,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
+    setTimeout(() => {
+      this.scrollable.scrollTo({ bottom: -500000, duration: 300 });
+    }, 100);
     this.userConnected = JSON.parse(
       localStorage.getItem('currentUser') || ''
     ).id;
 
     this.allUsers();
+    console.log(this.msgs);
   }
   toggleImageFullScreen(msg_img: any) {
     this.imageUrl = msg_img;
@@ -54,6 +64,7 @@ export class ChatComponent implements OnInit {
   }
   clickOutSideInout() {
     this.chatService.stopTyping();
+    this.showEmojiButtons = false;
   }
   allUsers() {
     this.chatService.getUsersApi().subscribe(
@@ -78,29 +89,12 @@ export class ChatComponent implements OnInit {
           .subscribe((res: any) => {
             this.data = res;
             this.msgs = res ? res.messages : [];
-
-            this.msgs.map((msg: any) => {
-              return (
-                msg.msg_img &&
-                (msg.msg_img = this.sanitizer.bypassSecurityTrustUrl(
-                  `data:image/jpeg;base64,${msg.msg_img}`
-                ))
-              );
-            });
           });
         this.chatService
           .getMessages(this.conversationObj)
           .subscribe((res: any) => {
             this.data = res;
             this.msgs = res ? res.messages : [];
-            this.msgs.map((msg: any) => {
-              return (
-                msg.msg_img &&
-                (msg.msg_img = this.sanitizer.bypassSecurityTrustUrl(
-                  `data:image/jpeg;base64,${msg.msg_img}`
-                ))
-              );
-            });
           });
 
         this.chatService.receiveTyping().subscribe((res: any) => {
@@ -131,14 +125,6 @@ export class ChatComponent implements OnInit {
       .subscribe((res: any) => {
         this.data = res;
         this.msgs = res ? res.messages : [];
-        this.msgs.map((msg: any) => {
-          return (
-            msg.msg_img &&
-            (msg.msg_img = this.sanitizer.bypassSecurityTrustUrl(
-              `data:image/jpeg;base64,${msg.msg_img}`
-            ))
-          );
-        });
       });
   }
   onListItemClick(i: any) {
@@ -149,6 +135,9 @@ export class ChatComponent implements OnInit {
       receiver: this.userConnected,
     };
     this.getMessagesForSelectedUser(this.conversationObj);
+    setTimeout(() => {
+      this.scrollable.scrollTo({ bottom: -500000, duration: 300 });
+    }, 200);
   }
   open(content: any, index: number) {
     this.messageIndexToDelete = index;
@@ -199,6 +188,15 @@ export class ChatComponent implements OnInit {
   }
   toggleEmojiButtons() {
     this.showEmojiButtons = !this.showEmojiButtons;
+    if (this.showEmojiButtons) {
+      this.chatService.typing({
+        userConnected: this.userConnected,
+        userSelected: this.userSelected,
+      });
+    }
+    if (!this.showEmojiButtons && (this.msg == undefined || this.msg == '')) {
+      this.chatService.stopTyping();
+    }
   }
   toggleDeleteButtons() {
     this.showDeleteButtons = !this.showDeleteButtons;
@@ -209,36 +207,29 @@ export class ChatComponent implements OnInit {
       () => {},
       (er) => {
         this.chatService
-          .getMessages(this.conversationObj)
-          .subscribe((res: any) => {
-            this.data = res;
-            this.msgs = res ? res.messages : [];
-            this.msgs.map((msg: any) => {
-              return (
-                msg.msg_img &&
-                (msg.msg_img = this.sanitizer.bypassSecurityTrustUrl(
-                  `data:image/jpeg;base64,${msg.msg_img}`
-                ))
-              );
-            });
-          });
-
-        this.chatService
           .getMessagesfromApi(this.conversationObj)
           .subscribe((res: any) => {
             this.data = res;
             this.msgs = res ? res.messages : [];
-            this.msgs.map((msg: any) => {
-              return (
-                msg.msg_img &&
-                (msg.msg_img = this.sanitizer.bypassSecurityTrustUrl(
-                  `data:image/jpeg;base64,${msg.msg_img}`
-                ))
-              );
-            });
+          });
+        this.chatService
+          .getMessages(this.conversationObj)
+          .subscribe((res: any) => {
+            this.data = res;
+            this.msgs = res ? res.messages : [];
           });
       }
     );
+  }
+  showNotification(message: string): void {
+    alert(message); // Use alert for simplicity
+    setTimeout(() => {
+      // Automatically close the alert after 5 seconds
+      this.clearNotification();
+    }, 5000);
+  }
+  clearNotification(): void {
+    // Nothing needed here for alert-based notification
   }
   sendMsg() {
     this.msg &&
@@ -250,14 +241,6 @@ export class ChatComponent implements OnInit {
             .subscribe((res: any) => {
               this.data = res;
               this.msgs = res ? res.messages : [];
-              this.msgs.map((msg: any) => {
-                return (
-                  msg.msg_img &&
-                  (msg.msg_img = this.sanitizer.bypassSecurityTrustUrl(
-                    `data:image/jpeg;base64,${msg.msg_img}`
-                  ))
-                );
-              });
             });
 
           this.chatService
@@ -265,14 +248,6 @@ export class ChatComponent implements OnInit {
             .subscribe((res: any) => {
               this.data = res;
               this.msgs = res ? res.messages : [];
-              this.msgs.map((msg: any) => {
-                return (
-                  msg.msg_img &&
-                  (msg.msg_img = this.sanitizer.bypassSecurityTrustUrl(
-                    `data:image/jpeg;base64,${msg.msg_img}`
-                  ))
-                );
-              });
             });
           this.msg = '';
           this.showEmojiButtons = false;
@@ -284,6 +259,10 @@ export class ChatComponent implements OnInit {
       formData.append('conversationObj', JSON.stringify(this.conversationObj));
       this.chatService.sendimage(formData).subscribe(
         (res: any) => {
+          console.log(res);
+          this.showNotification(
+            'The image contains explicit or violent content.'
+          );
           this.selectedFileName = '';
         },
         (er) => {
@@ -291,16 +270,9 @@ export class ChatComponent implements OnInit {
           this.chatService
             .getMessages(this.conversationObj)
             .subscribe((res: any) => {
+              console.log(res);
               this.data = res;
               this.msgs = res ? res.messages : [];
-              this.msgs.map((msg: any) => {
-                return (
-                  msg.msg_img &&
-                  (msg.msg_img = this.sanitizer.bypassSecurityTrustUrl(
-                    `data:image/jpeg;base64,${msg.msg_img}`
-                  ))
-                );
-              });
             });
 
           this.chatService
@@ -308,15 +280,8 @@ export class ChatComponent implements OnInit {
             .subscribe((res: any) => {
               this.data = res;
               this.msgs = res ? res.messages : [];
-              this.msgs.map((msg: any) => {
-                return (
-                  msg.msg_img &&
-                  (msg.msg_img = this.sanitizer.bypassSecurityTrustUrl(
-                    `data:image/jpeg;base64,${msg.msg_img}`
-                  ))
-                );
-              });
             });
+          this.selectedFile = null;
         }
       );
     }
@@ -336,6 +301,28 @@ export class ChatComponent implements OnInit {
     } else {
       this.selectedFile = null;
       this.imageUrl = null;
+    }
+  }
+
+  searchMsg() {
+    let body = { ...this.conversationObj, msg: this.msgSearch };
+
+    if (!this.msgSearch) {
+      this.chatService
+        .getMessagesfromApi(this.conversationObj)
+        .subscribe((res: any) => {
+          this.data = res;
+          this.msgs = res ? res.messages : [];
+        });
+    } else {
+      this.chatService.searchMsg(body).subscribe(
+        (res: any) => {
+          this.msgs = res;
+        },
+        (er) => {
+          console.error(er);
+        }
+      );
     }
   }
 }

@@ -13935,3 +13935,35 @@ html.ie11 .bs-searchbox .form-control {
 .list-icon {
   vertical-align: middle;
 }
+
+.input-container {
+  position: relative;
+  width: 100%;
+  
+}
+
+.input-container input {
+  width: 100%;
+  padding-right: 40px; /* Adjust this value to fit your button */
+}
+
+.input-container .btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.input-container .btn i {
+  padding: 10px;
+  background: #ddd; /* Change background color as needed */
+  border-radius: 0 4px 4px 0;
+}
+
+.input-container .btn:hover i {
+  background: #ccc; /* Change hover background color as needed */
+}

@@ -22,7 +22,7 @@ const users: User[] = [
   },
   {
     id: '6645d5ed05d11e5b39329ddb',
-    username: 'user2@user2@user2',
+    username: 'user2@user2.user2',
     password: 'admin@123',
     firstName: 'user2',
     lastName: 'lastName user2',

@@ -65,6 +65,26 @@
                 <div class="chat-num-messages">2 new messages</div>
               </div>
             </div>
+            <form>
+              <div class="input-container" style="position: relative">
+                <input
+                  style="margin-top: 1.5em"
+                  name="msg2"
+                  type="text"
+                  class="form-control"
+                  placeholder="find MSG..."
+                  [(ngModel)]="msgSearch"
+                />
+                <button
+                  style="position: absolute; right: 0; top: 0"
+                  type="submit"
+                  class="btn btn-default"
+                  (click)="searchMsg()"
+                >
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+            </form>
             <div>
               <button
                 style="margin-top: 2em"
@@ -86,6 +106,7 @@
           </div>
           <div class="chat-box">
             <ng-scrollbar
+              #scrollable
               style="position: relative"
               visibility="hover"
               class="card-body chat-content"
@@ -185,6 +206,7 @@
                 <emoji-mart (emojiClick)="addEmoji($event)"></emoji-mart>
               </div>
             </ng-scrollbar>
+
             <div class="card-footer chat-form" style="position: relative">
               <form id="chat-form">
                 <input
@@ -200,6 +222,7 @@
                   type="submit"
                   class="btn btn-primary"
                   (click)="sendMsg()"
+                  (click)="scrollable.scrollTo({ bottom: -80, duration: 300 })"
                 >
                   <i class="far fa-paper-plane"></i>
                 </button>
