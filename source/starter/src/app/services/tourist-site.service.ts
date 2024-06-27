@@ -37,4 +37,11 @@ export class TouristSiteService {
   createTouristSite(data: FormData): Observable<TouristSite> {
     return this.http.post<TouristSite>(this.apiUrl, data);
   }
+  updateTouristSite(siteId: string, site: FormData): Observable<TouristSite> {
+    return this.http.put<TouristSite>(`${this.apiUrl}/${siteId}`, site);
+  }
+
+  deleteTouristSite(name: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${encodeURIComponent(name)}`);
+  }
 }

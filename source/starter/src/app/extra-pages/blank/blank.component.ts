@@ -6,6 +6,7 @@ import { Review  } from '../../model/review.model';
 import { TicketService } from '../../services/ticket-service.service';  // Import the ticket service
 import { saveAs } from 'file-saver'; // Import file-saver for handling downloads
 import * as L from 'leaflet';
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -29,7 +30,11 @@ export class BlankComponent implements OnInit {
   selectedCoordinates: [number, number] = [0, 0];
   showCreateSiteModal: boolean = false;
   createSiteForm: { name: string, description: string, address: string, category: string, photos: File[] } = { name: '', description: '', address: '', category: '', photos: [] };
-
+ 
+  editSiteForm: any = {}; // Initialize properly
+  showEditSiteModal: boolean = false;
+  
+  
 
   newReview: Review = {
     _id: '',
@@ -45,6 +50,7 @@ export class BlankComponent implements OnInit {
     private touristSiteService: TouristSiteService,
     private siteReviewService: SiteReviewService,
     private ticketService: TicketService,
+    private http: HttpClient,
   
    
   ) { }
@@ -77,6 +83,22 @@ export class BlankComponent implements OnInit {
     this.createSiteForm.photos = event.target.files;
   }
 
+  openEditSiteModal(site: TouristSite): void {
+    this.editSiteForm = { ...site, photos: [] }; // Clone the site object and reset photos
+    this.showEditSiteModal = true;
+  }
+
+  closeEditSiteModal(): void {
+    this.showEditSiteModal = false;
+  }
+
+  onEditFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files) {
+      this.editSiteForm.photos = input.files;
+    }
+  }
+
   submitCreateSiteForm(): void {
     const formData = new FormData();
     formData.append('name', this.createSiteForm.name);
@@ -98,6 +120,22 @@ export class BlankComponent implements OnInit {
       }
     });
   }
+  
+  
+  deleteSite(siteId: string): void {
+    if (confirm('Are you sure you want to delete this site?')) {
+      this.touristSiteService.deleteTouristSite(siteId).subscribe({
+        next: (response) => {
+          console.log('Tourist site deleted:', response);
+          this.fetchSites();
+        },
+        error: (error) => {
+          console.error('Error deleting tourist site:', error);
+        }
+      });
+    }
+  }
+
 
   
 fetchReviews(site: TouristSite): void {
@@ -219,8 +257,48 @@ fetchReviews(site: TouristSite): void {
     L.marker(this.selectedCoordinates).addTo(this.map)
       .bindPopup('Selected Location')
       .openPopup();
-  }}
+  }
 
+   submitEditSiteForm(): void {
+    const convertToBase64 = (file: File): Promise<string | ArrayBuffer | null> => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    };
+
+    const files = Array.from(this.editSiteForm.photos || []) as File[];
+    const base64Promises = files.map(file => convertToBase64(file));
+
+    Promise.all(base64Promises)
+      .then((photosBase64: (string | ArrayBuffer | null)[]) => {
+        const formData = new FormData();
+        formData.append('name', this.editSiteForm.name);
+        formData.append('description', this.editSiteForm.description);
+        formData.append('address', this.editSiteForm.address);
+        formData.append('category', this.editSiteForm.category);
+        photosBase64.forEach((photo, index) => {
+          formData.append(`photos[${index}]`, photo as string);
+        });
+
+        this.touristSiteService.updateTouristSite(this.editSiteForm._id, formData).subscribe({
+          next: (response: any) => {
+            console.log('Tourist site updated:', response);
+            this.closeEditSiteModal();
+            this.fetchSites();
+          },
+          error: (error: any) => {
+            console.error('Error updating tourist site:', error);
+          }
+        });
+      })
+      .catch(error => {
+        console.error('Error converting photos:', error);
+      });
+  }
+}
 
  
 
