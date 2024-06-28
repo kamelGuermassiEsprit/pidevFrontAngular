@@ -31,34 +31,38 @@
               <p><small class="text-muted">End: {{ event?.date_fin | date:'d MMMM y, h:mm a' }}</small></p>
               <p><small class="text-muted">{{ event?.etat }}</small></p>
               <p> Participants : <small class="text-muted">{{ getParticipantNames()}} </small>
-              <div style="display: flex; align-items: center;">
-                <small class="text-muted" (click)="openModal(event,content)">
+    
 
-                  <i class="fas fa-heart fa-lg" style="color: #e20303;"></i> {{ event.likes }}
-                </small>
-                <ng-template #content let-modal>
-                  <div class="modal-header justify-content-between">
-                    <h4 class="modal-title" id="modal-basic-title">Likers</h4>    
-                    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                      <span aria-hidden="true">&times;</span>
+
+                <div class="icon-container" style="display: flex; flex-direction: column; gap: 30px;">
+                  <div style="display: flex; align-items: center; gap: 3px;">
+                    <button class="btn-primary" (click)="openModal(event,content)" style="background-color: transparent; border: none; color: #0364e2; display: flex; align-items: center;">
+
+                      <i class="fas fa-thumbs-up"></i>
+                      <span>{{ event.likes }}</span>
+                    </button>
+                    <button class="btn-primary" (click)="commentsVisible = !commentsVisible" style="background-color: transparent; border: none; color: #63E6BE; display: flex; align-items: center;">
+                      <i class="fas fa-comment-dots fa-lg"></i>
+                      <span>{{ event.comments.length }}</span>
                     </button>
                   </div>
-                     <div class="modal-body">
-                       <p>{{ likers }}</p>
-                     </div>
-                   </ng-template>
-                <button (click)="commentsVisible = !commentsVisible" style="margin-left: 10px; background-color: transparent; border: none;color: #63E6BE;">
-                  <i class="fas fa-comment-dots fa-lg" style="color: #63E6BE;"></i>
-                  {{ event.comments.length }}</button>
+                  </div>
 
-              </div>
+
+              <ng-template #content let-modal>
+                <div class="modal-header justify-content-between">
+                  <h4 class="modal-title" id="modal-basic-title">Likers</h4>    
+                  <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                   <div class="modal-body">
+                     <p>{{ likers }}</p>
+                   </div>
+                 </ng-template>
             
 
-              <div style="display: flex; flex-wrap: wrap;">
-                <div *ngFor="let participant of event.participants" class="card" style="max-width: 100px; max-height: 100px; margin-right: 10px;">
-                  <!-- Participant details here -->
-                </div>
-              </div>
+           
               <div *ngIf="commentsVisible">
               
                 <div class="media-body">

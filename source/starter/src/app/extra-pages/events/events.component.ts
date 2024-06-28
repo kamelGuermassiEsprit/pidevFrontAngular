@@ -3,9 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import{EventService} from "../../services/event.service"
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
 @Component({
   selector: 'app-event',
+
   templateUrl: './events.component.html',
   styleUrls: ['./events.component.scss']
 })
@@ -17,7 +17,7 @@ likers: any;
 searchTitle: string = '';
 searchResults: any[] = [];
 searchPerformed: boolean = false;
-
+commentsVisible = false;
 
 
 
@@ -31,6 +31,7 @@ searchPerformed: boolean = false;
  
 
       this.events=res;
+      console.log(this.events);
       
     
     },
@@ -42,13 +43,12 @@ searchPerformed: boolean = false;
   }
 
 
-
   searchEvent() {
     if (this.searchTitle.trim() === '') {
       this.searchPerformed = false;
     } else {
       this.searchPerformed = true;
-      this.eventService.searchEventByTitle(this.searchTitle).subscribe(
+      this.eventService.searchEventByTitleOrCountry(this.searchTitle).subscribe(
         (res) => {
           this.searchResults = res;
         },
@@ -58,7 +58,6 @@ searchPerformed: boolean = false;
       );
     }
   }
-  
 
 
   getLikers(event: { likers: any[]; }) {
@@ -71,15 +70,16 @@ searchPerformed: boolean = false;
      this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
    }
 
-
    likeEvent(event: any, userId: string) {
-    this.eventService.likeEvent(event._id, userId).subscribe(
+ 
+   this.eventService.likeEvent(event._id, userId).subscribe(
       (res) => {
         console.log(res);
         if (res === 'Event liked') {
           // The event was liked
           event.likes += 1;
           event.likers.push(userId);
+
         } else if (res === 'Event unliked') {
           // The event was unliked
           event.likes -= 1;
@@ -93,9 +93,14 @@ searchPerformed: boolean = false;
         console.log(err);
       }
     );
+  location.reload();
+
   }
 
-  
+
+
+
+
 }
 
 
