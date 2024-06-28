@@ -18,13 +18,17 @@
 </div>
 
       <div *ngIf="noSitesFound">No sites found.</div>
-      <div class="col-md-6">
+      <div class="col-md-6 d-flex align-items-center">
         <select class="form-control" [(ngModel)]="selectedCategory" (change)="filterSitesByCategory()">
           <option value="">All Categories</option>
           <option value="Historical">Historical</option>
           <option value="Natural">Natural</option>
           <option value="Cultural">Cultural</option>
         </select>
+        
+          <!-- Existing search and category filter elements -->
+          <button class="btn btn-secondary mt-2" (click)="sortByRating()">Sort by Rating</button>
+      
       </div>
     </div>
 
@@ -44,8 +48,8 @@
             <p>{{ site.description }}</p>
             <p>Category: {{ site.category }}</p>
             <p>Average Rating: {{ site.average_rating }}</p>
-            <div *ngIf="site.photos.length > 0">
-              <img [src]= "'http://localhost:5001/' + site.photos[0]" alt="{{ site.name }}" class="img-fluid"style="width: 200px; height: auto;">
+            <div class="photos">
+              <img *ngFor="let photo of site.photos" [src]="'http://localhost:5001/' + photo" alt="{{ site.name }}"class="img-fluid"style="width: 200px; height: auto;">
             </div>
             <div class="review-section">
               <h5>Leave a Review</h5>

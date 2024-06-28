@@ -95,7 +95,7 @@ export class BlankComponent implements OnInit {
   onEditFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files) {
-      this.editSiteForm.photos = input.files;
+      this.editSiteForm.photos = Array.from(input.files); // Convert FileList to Array
     }
   }
 
@@ -163,6 +163,11 @@ fetchReviews(site: TouristSite): void {
       this.fetchSites();
     }
   }
+  sortByRating(): void {
+    this.touristSiteService.getSitesSortedByRating().subscribe((data: TouristSite[]) => {
+        this.sites = data;
+    });
+}
 
   rate(siteId: string, rating: number): void {
     this.currentRatingMap.set(siteId, rating);
@@ -259,44 +264,28 @@ fetchReviews(site: TouristSite): void {
       .openPopup();
   }
 
-   submitEditSiteForm(): void {
-    const convertToBase64 = (file: File): Promise<string | ArrayBuffer | null> => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-      });
-    };
-
-    const files = Array.from(this.editSiteForm.photos || []) as File[];
-    const base64Promises = files.map(file => convertToBase64(file));
-
-    Promise.all(base64Promises)
-      .then((photosBase64: (string | ArrayBuffer | null)[]) => {
-        const formData = new FormData();
-        formData.append('name', this.editSiteForm.name);
-        formData.append('description', this.editSiteForm.description);
-        formData.append('address', this.editSiteForm.address);
-        formData.append('category', this.editSiteForm.category);
-        photosBase64.forEach((photo, index) => {
-          formData.append(`photos[${index}]`, photo as string);
-        });
-
-        this.touristSiteService.updateTouristSite(this.editSiteForm._id, formData).subscribe({
-          next: (response: any) => {
-            console.log('Tourist site updated:', response);
-            this.closeEditSiteModal();
-            this.fetchSites();
-          },
-          error: (error: any) => {
-            console.error('Error updating tourist site:', error);
-          }
-        });
-      })
-      .catch(error => {
-        console.error('Error converting photos:', error);
-      });
+  submitEditSiteForm(): void {
+    const formData = new FormData();
+    formData.append('name', this.editSiteForm.name);
+    formData.append('description', this.editSiteForm.description);
+    formData.append('address', this.editSiteForm.address);
+    formData.append('category', this.editSiteForm.category);
+  
+    // Ensure photos are appended
+    (this.editSiteForm.photos as File[]).forEach((file: File, index: number) => {
+      formData.append('photos', file);
+    });
+  
+    this.touristSiteService.updateTouristSite(this.editSiteForm._id, formData).subscribe({
+      next: (response: any) => {
+        console.log('Tourist site updated:', response);
+        this.closeEditSiteModal();
+        this.fetchSites();
+      },
+      error: (error: any) => {
+        console.error('Error updating tourist site:', error);
+      }
+    });
   }
 }
 
