@@ -10,7 +10,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./events.component.scss']
 })
 export class EventsComponent implements OnInit {
-
+event : any;
+id : any;
 events:any ;
 likers: any;
 
@@ -97,10 +98,18 @@ commentsVisible = false;
 
   }
 
-
-
-
-
+  addComment(commentText: string, eventId: string) {
+    const comment = { user: '666dc519371979aac3312f13', text: commentText };  // Replace with the actual user ID
+    this.eventService.addCommentToEvent(eventId, comment).subscribe(
+      (event: any) => {
+        this.event = event;
+        console.log(this.event);
+      },
+      error => console.error('Error adding comment:', error)
+    );
+   // this.router.navigate(['/Events/EventsList']); 
+    location.reload();
+  }
 }
 
 

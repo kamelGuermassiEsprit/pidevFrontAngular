@@ -82,6 +82,13 @@
                 </div>
               </div>
               </div>
+              <form class="mt-3 mb-5" (submit)="addComment(commentText.value, event._id)">
+                <div class="form-group">
+                  <input type="text" class="form-control" #commentText placeholder="Add a comment">
+                </div>
+                <button type="submit" class="btn btn-primary">Add Comment</button>
+              </form>
+            
             </div>
 
           </div>
@@ -173,6 +180,12 @@
                   </div>
                 </div>
                 </div>
+                <form class="mt-3 mb-5" (submit)="addComment(commentText.value, event._id)">
+                  <div class="form-group">
+                    <input type="text" class="form-control" #commentText placeholder="Add a comment">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Add Comment</button>
+                </form>
               </div>
 
               
