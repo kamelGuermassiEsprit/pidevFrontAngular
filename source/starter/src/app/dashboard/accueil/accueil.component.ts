@@ -52,4 +52,16 @@ export class AccueilComponent implements OnInit {
   onSearch(): void {
     this.getAllListings(this.searchTitle);
   }
+  deleteListing(id: string): void {
+    this.listingService.deleteListing(id).subscribe(
+      (response) => {
+        console.log('Listing deleted successfully:', response);
+        // Remove the deleted listing from the listings array
+        this.listings = this.listings.filter(listing => listing._id !== id);
+      },
+      (error) => {
+        console.error('Error deleting listing:', error);
+      }
+    );
+  }
 }

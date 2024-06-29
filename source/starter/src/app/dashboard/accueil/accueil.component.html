@@ -40,6 +40,7 @@
         <p *ngIf="listing.ratings && listing.ratings.length > 0" class="mb-0">
           <strong>Average Rating:</strong> {{ calculateAverageRating(listing.ratings) | number: '1.1-1' }}
         </p>
+        <button (click)="deleteListing(listing._id)" class="btn btn-danger">Delete</button>
       </li>
     </ul>
   </div>
