@@ -30,7 +30,7 @@
           <h5>Photos:</h5>
           <div class="row">
             <div *ngFor="let photo of listing.photos" class="col-md-3 mb-3">
-              <img [src]="photo" alt="Listing Photo" class="img-fluid" />
+              <img [src]="'http://localhost:5001/' + photo" alt="Listing Photo" class="img-fluid" />
             </div>
           </div>
         </div>

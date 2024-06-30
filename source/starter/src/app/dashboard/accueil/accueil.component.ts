@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ListingService } from '../../services/listing.service';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-accueil',
@@ -9,15 +8,10 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 })
 export class AccueilComponent implements OnInit {
   listings: any[] = [];
-
   searchTitle = '';
 
+  constructor(private listingService: ListingService) {}
 
-  constructor(private listingService: ListingService,private sanitizer: DomSanitizer) {}
-
-  
-
- 
   ngOnInit(): void {
     this.getAllListings();
   }
@@ -25,13 +19,6 @@ export class AccueilComponent implements OnInit {
   getAllListings(country?: string): void {
     this.listingService.getAllListings(country).subscribe(
       (data) => {
-        data.forEach((item: any) => {
-          item.photos = item.photos.map((photo: any) => {
-            photo = this.sanitizer.bypassSecurityTrustUrl(`data:image/jpeg;base64,${photo}`);
-            return photo;
-          });
-        });
-
         this.listings = data;
         console.log('Listings fetched successfully:', this.listings);
       },
@@ -52,16 +39,19 @@ export class AccueilComponent implements OnInit {
   onSearch(): void {
     this.getAllListings(this.searchTitle);
   }
+
   deleteListing(id: string): void {
-    this.listingService.deleteListing(id).subscribe(
-      (response) => {
-        console.log('Listing deleted successfully:', response);
-        // Remove the deleted listing from the listings array
-        this.listings = this.listings.filter(listing => listing._id !== id);
-      },
-      (error) => {
-        console.error('Error deleting listing:', error);
-      }
-    );
+    if (window.confirm('Are you sure you want to delete this listing?')){
+      this.listingService.deleteListing(id).subscribe(
+        (response) => {
+          console.log('Listing deleted successfully:', response);
+          // Remove the deleted listing from the listings array
+          this.listings = this.listings.filter(listing => listing._id !== id);
+        },
+        (error) => {
+          console.error('Error deleting listing:', error);
+        }
+      );
+    }
   }
 }
