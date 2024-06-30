@@ -1,5 +1,5 @@
 <section class="main-content">
-  <ul class="breadcrumb breadcrumb-style ">
+  <ul class="breadcrumb breadcrumb-style">
     <li class="breadcrumb-item">
       <h5 class="page-title m-b-0">Listing</h5>
     </li>
@@ -18,8 +18,7 @@
             <h4>Listing Management</h4>
           </div>
           <div class="card-body">
-            <!-- Add content here -->
-            <form class="form-group" #eventForm="ngForm">
+            <form class="form-group" #eventForm="ngForm" (ngSubmit)="onSubmit(eventForm)">
               <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
                 <input id="title" [(ngModel)]="listing.title" name="title" class="form-control" required #title="ngModel" />
@@ -64,6 +63,7 @@
               </div>
               <div class="mb-3">
                 <label for="photos" class="form-label">Photos</label>
+                <input type="file" (change)="selectFiles($event)" class="form-control m-1" style="width: auto;" placeholder="Upload file" multiple>
               </div>
               <button type="submit" class="btn btn-primary">Create Listing</button>
             </form>
