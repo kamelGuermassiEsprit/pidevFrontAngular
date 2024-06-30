@@ -24,7 +24,7 @@
     <h2>Listings</h2>
     <ul class="list-group">
       <li *ngFor="let listing of listings" class="list-group-item mb-4">
-        <h3 class="listing-title">{{ listing.title }}</h3>
+        <a [routerLink]="['/dashboard/listing-details', listing._id]">{{listing.title}}</a>
         <p class="listing-description">{{ listing.description }}</p>
         <div *ngIf="listing.photos && listing.photos.length > 0">
           <h5>Photos:</h5>
@@ -41,6 +41,7 @@
           <strong>Average Rating:</strong> {{ calculateAverageRating(listing.ratings) | number: '1.1-1' }}
         </p>
         <button (click)="deleteListing(listing._id)" class="btn btn-danger">Delete</button>
+
       </li>
     </ul>
   </div>

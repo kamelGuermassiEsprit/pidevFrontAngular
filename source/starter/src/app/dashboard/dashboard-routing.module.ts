@@ -4,6 +4,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { MainComponent } from './main/main.component';
 import { ChatComponent } from './chat/chat.component';
 import { AccueilComponent } from './accueil/accueil.component';
+import { ListingDetailsComponent } from './listing-details/listing-details.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -25,6 +27,10 @@ const routes: Routes = [
   {
     path: 'accueil',
     component: AccueilComponent,
+  },
+  {
+    path: 'listing-details/:id',
+    component: ListingDetailsComponent
   },
 ];
 @NgModule({
