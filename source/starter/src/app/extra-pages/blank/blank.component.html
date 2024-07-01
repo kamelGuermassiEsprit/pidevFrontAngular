@@ -12,22 +12,22 @@
   <div class="section-body">
     <div class="row mb-3">
       <div class="search-container">
-        <input #searchBox type="text" class="form-control search-input" placeholder="Rechercher un site" (keyup.enter)="searchSites(searchBox.value)">
+        <input #searchBox type="text" class="form-control search-input" placeholder="Rechercher un site" (keyup)="searchSites(searchBox.value)">
         <i class="fa fa-search search-icon" (click)="searchSites(searchBox.value)"></i>
       
 </div>
 
       <div *ngIf="noSitesFound">No sites found.</div>
       <div class="col-md-6 d-flex align-items-center">
-        <select class="form-control" [(ngModel)]="selectedCategory" (change)="filterSitesByCategory()">
-          <option value="">All Categories</option>
-          <option value="Historical">Historical</option>
-          <option value="Natural">Natural</option>
-          <option value="Cultural">Cultural</option>
+        <select class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" width="1000pxS" [(ngModel)]="selectedCategory" (change)="filterSitesByCategory()">
+          <option class="dropdown-item" value="">All Categories</option>
+          <option class="dropdown-item" value="Historical">Historical</option>
+          <option class="dropdown-item" value="Natural">Natural</option>
+          <option class="dropdown-item" value="Cultural">Cultural</option>
         </select>
         
           <!-- Existing search and category filter elements -->
-          <button class="btn btn-secondary mt-2" (click)="sortByRating()">Sort by Rating</button>
+          <button class="btn btn-outline-primary" (click)="sortByRating()">Sort by Rating</button>
       
       </div>
     </div>
@@ -39,10 +39,12 @@
         <div class="card">
           <div class="card-header">
             <h4>{{ site.name }}</h4>
-            <mat-icon (click)="openTicketModal(site)">confirmation_number</mat-icon>
-            <button class="btn btn-warning btn-sm ml-2" (click)="openEditSiteModal(site)">Edit</button>
-          <button class="btn btn-danger btn-sm ml-2" (click)="deleteSite(site.name);reloadPage()">Delete</button>
-          </div>
+            <button class="btn btn-outline-success" (click)="openTicketModal(site)">Generate Ticket</button>
+            <div style=" margin-left: auto">
+            <button class="btn btn-outline-warning" (click)="openEditSiteModal(site)">Edit</button>
+             <button class="btn btn-outline-danger" (click)="deleteSite(site.name);reloadPage()">Delete</button>
+            </div>
+        </div>
           ''
           <div class="card-body">
             <p>{{ site.description }}</p>
@@ -71,16 +73,24 @@
               <div *ngIf="showCommentsMap.get(site._id)" class="existing-reviews">
                 <h5>Reviews</h5>
                 <div *ngFor="let review of site.reviews">
+                  
                   <p class="review-header">
-                    <strong>{{ review.userName }} </strong>
+                   <strong>{{ review.userName }} </strong>
+                   
                       <span class="rating">
                         <span *ngFor="let star of [1, 2, 3, 4, 5]" 
                               [ngClass]="{'filled': star <= review.rating}">
                           &#9733;
                         </span>
+                        
                     </span> 
+                    
                     </p>
+                    
                   <p class="review-comment">{{ review.comment }}</p>
+                  <div class="delete" >
+                    <button class="btn btn-outline-danger" (click)="deleteSiteReview(review._id);reloadPage()">Delete</button>
+                  </div>
                   
                 </div>
               </div>
@@ -174,7 +184,7 @@
     </div>
   </div>
 
-  <div class="modal" tabindex="-1" role="dialog" [ngClass]="{'show': showTicketModal}" [style.display]="showTicketModal ? 'block' : 'none'">
+  <div class="modal small-modal" tabindex="-1" role="dialog" [ngClass]="{'show': showTicketModal}" [style.display]="showTicketModal ? 'block' : 'none'">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -202,7 +212,7 @@
       </div>
     </div>
     
-    <div class="modal" tabindex="-1" role="dialog" [ngClass]="{'show': showMapModal}" [style.display]="showMapModal ? 'block' : 'none'">
+    <div class="modal small-modal" tabindex="-1" role="dialog" [ngClass]="{'show': showMapModal}" [style.display]="showMapModal ? 'block' : 'none'">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">

@@ -15,6 +15,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./blank.component.sass']
 })
 export class BlankComponent implements OnInit {
+  [x: string]: any;
   searchQuery: string = '';
   selectedCategory: string = '';
   sites: TouristSite[] = [];
@@ -30,22 +31,26 @@ export class BlankComponent implements OnInit {
   selectedCoordinates: [number, number] = [0, 0];
   showCreateSiteModal: boolean = false;
   createSiteForm: { name: string, description: string, address: string, category: string, photos: File[] } = { name: '', description: '', address: '', category: '', photos: [] };
- 
+  
   editSiteForm: any = {}; // Initialize properly
   showEditSiteModal: boolean = false;
+  isSortedByRating: boolean = false;
+  
   
   
 
   newReview: Review = {
     _id: '',
-    userId: '6645d659587b926668ca3365',
+    userId: this['userConnected'] = JSON.parse(
+      localStorage.getItem('currentUser') || ''
+    ).id,
     siteId: '',
     rating: 0,
     comment: '',
     userName: ''
   };
   showMapModal = false;
-
+  
   constructor(
     private touristSiteService: TouristSiteService,
     private siteReviewService: SiteReviewService,
@@ -135,6 +140,19 @@ export class BlankComponent implements OnInit {
       });
     }
   }
+  deleteSiteReview(_id: string): void {
+    if (confirm('Are you sure you want to delete this rivew?')) {
+      this.siteReviewService.deleteSiteReview(_id).subscribe({
+        next: (response) => {
+          console.log('Tourist site deleted:', response);
+          this.fetchSites();
+        },
+        error: (error) => {
+          console.error('Error deleting tourist site:', error);
+        }
+      });
+    }
+  }
 
 
   
@@ -145,29 +163,44 @@ fetchReviews(site: TouristSite): void {
   });
 }
 
-  searchSites(name: string): void {
+searchSites(name: string): void {
+  if (name.trim().length > 0) {
     this.touristSiteService.searchSites(name).subscribe((data: TouristSite[]) => {
-      console.log('Search results:', data); // Debugging line
       this.sites = data;
+      this.sites.forEach(site => this.fetchReviews(site));
+      this.noSitesFound = this.sites.length === 0; // Set flag if no sites found
     }, error => {
       console.error('Error fetching search results', error);
+      this.sites = [];
+      this.noSitesFound = true; // Set flag if error occurs
     });
+  } else {
+    this.fetchSites(); // Fetch all sites if search query is empty
+    this.noSitesFound = false; // Reset flag
   }
+}
 
   filterSitesByCategory(): void {
     if (this.selectedCategory) {
       this.touristSiteService.filterSitesByCategory(this.selectedCategory).subscribe((data: TouristSite[]) => {
         this.sites = data;
+        this.sites.forEach(site => this.fetchReviews(site));
       });
     } else {
       this.fetchSites();
     }
   }
   sortByRating(): void {
-    this.touristSiteService.getSitesSortedByRating().subscribe((data: TouristSite[]) => {
+    if (this.isSortedByRating) {
+      this.fetchSites(); // Fetch default list if currently sorted by rating
+    } else {
+      this.touristSiteService.getSitesSortedByRating().subscribe((data: TouristSite[]) => {
         this.sites = data;
-    });
-}
+        this.sites.forEach(site => this.fetchReviews(site));
+      });
+    }
+    this.isSortedByRating = !this.isSortedByRating; // Toggle sorting state
+  }
 
   rate(siteId: string, rating: number): void {
     this.currentRatingMap.set(siteId, rating);
@@ -180,7 +213,9 @@ fetchReviews(site: TouristSite): void {
   submitReview(site: TouristSite): void {
     const newReview: Review = {
       _id: '',
-      userId: '6672a6029aa4d3d8e92d1ee1', // replace with actual user ID
+      userId:this['userConnected'] = JSON.parse(
+        localStorage.getItem('currentUser') || ''
+      ).id, // replace with actual user ID
       siteId: site._id,
       rating: this.currentRatingMap.get(site._id) || 0,
       comment: this.reviewMap.get(site._id)?.comment || '',

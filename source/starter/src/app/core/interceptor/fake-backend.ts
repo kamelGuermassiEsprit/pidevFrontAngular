@@ -13,13 +13,22 @@ import { User } from '../models/user';
 
 const users: User[] = [
   {
-    id: 1,
-    username: 'admin@email.com',
-    password: 'admin@123',
-    firstName: 'Sarah',
-    lastName: 'Smith',
-    token: 'admin-token',
+    id:'6645d659587b926668ca3365',
+    username:"test",
+    password:"hhahah",
+    firstName:"test",
+    lastName:"fr",
+    token:"admin-token"
   },
+  {
+    id: '6645d7745883f203a6f10a89' ,
+    username:'ala',
+    password:'mdp',
+    firstName:'ala',
+    lastName:'fr',
+    token:'admin-token',
+  },
+
 ];
 
 @Injectable()
@@ -64,7 +73,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
     // helper functions
 
     function ok(body?: {
-      id: number;
+      id: string;
       username: string;
       firstName: string;
       lastName: string;
