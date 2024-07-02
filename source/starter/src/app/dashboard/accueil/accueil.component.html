@@ -1,5 +1,5 @@
 <section class="main-content">
-  <ul class="breadcrumb breadcrumb-style ">
+  <ul class="breadcrumb breadcrumb-style">
     <li class="breadcrumb-item">
       <h5 class="page-title m-b-0">Houses</h5>
     </li>
@@ -40,8 +40,14 @@
         <p *ngIf="listing.ratings && listing.ratings.length > 0" class="mb-0">
           <strong>Average Rating:</strong> {{ calculateAverageRating(listing.ratings) | number: '1.1-1' }}
         </p>
+        
         <button (click)="deleteListing(listing._id)" class="btn btn-danger">Delete</button>
-
+        
+        <!-- Add Rating Form -->
+        <div>
+          <input type="number" [(ngModel)]="listing.newRating" name="rating" min="1" max="5" placeholder="Rate 1-5">
+          <button (click)="addRating(listing._id, listing.newRating)" class="btn btn-primary">Add Rating</button>
+        </div>
       </li>
     </ul>
   </div>

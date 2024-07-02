@@ -19,6 +19,7 @@ export class ListingDetailsComponent implements OnInit {
     ratings: []
   };
   listingId: string | null = null;
+  selectedPhotos: File[] = [];
 
   constructor(
     private listingService: ListingService,
@@ -38,14 +39,18 @@ export class ListingDetailsComponent implements OnInit {
   fetchListingDetails(id: string): void {
     this.listingService.getListingById(id).subscribe(
       (data) => {
-        console.log('Fetched listing data:', data);  // Ensure photos are present here
-
         this.listing = data;
       },
       (error) => {
         console.error('Error fetching listing details:', error);
       }
     );
+  }
+
+  onPhotoSelected(event: any): void {
+    if (event.target.files && event.target.files.length) {
+      this.selectedPhotos = Array.from(event.target.files);
+    }
   }
 
   calculateAverageRating(ratings: number[]): number {
@@ -56,7 +61,33 @@ export class ListingDetailsComponent implements OnInit {
     return sum / ratings.length;
   }
 
-  navigateToUpdate(id: string): void {
-    this.router.navigate(['/advanced-table', id]);
+  onSubmit(): void {
+    if (this.listingId) {
+      const formData = new FormData();
+      formData.append('title', this.listing.title);
+      formData.append('description', this.listing.description);
+      formData.append('address', this.listing.address);
+      formData.append('amneties', this.listing.amneties);
+      formData.append('availability', this.listing.availability);
+      formData.append('houseRules', this.listing.houseRules);
+
+      if (this.selectedPhotos.length) {
+        this.selectedPhotos.forEach(photo => {
+          formData.append('photos', photo);
+        });
+      }
+
+      console.log('FormData:', formData); // Debugging: Check the FormData content
+
+      this.listingService.updateListing(this.listingId, formData).subscribe(
+        (response) => {
+          console.log('Listing updated successfully:', response);
+          this.router.navigate(['/dashboard/listing-details', this.listingId]);
+        },
+        (error) => {
+          console.error('Error updating listing:', error);
+        }
+      );
+    }
   }
 }

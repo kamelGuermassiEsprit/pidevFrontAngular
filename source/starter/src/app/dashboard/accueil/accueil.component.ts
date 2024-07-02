@@ -54,4 +54,21 @@ export class AccueilComponent implements OnInit {
       );
     }
   }
+
+  addRating(listingId: string, rating: number): void {
+    if (rating < 1 || rating > 5) {
+      alert('Rating must be between 1 and 5');
+      return;
+    }
+    this.listingService.addRating(listingId, rating).subscribe(
+      (response) => {
+        console.log('Rating added successfully:', response);
+        // Update the listing with the new rating
+        this.getAllListings();
+      },
+      (error) => {
+        console.error('Error adding rating:', error);
+      }
+    );
+  }
 }
