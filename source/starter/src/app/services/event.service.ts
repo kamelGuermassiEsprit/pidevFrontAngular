@@ -13,8 +13,8 @@ export class EventService {
 
   constructor(private http:HttpClient) { }
 
-  getAllEvents(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/api/GetEvent`);
+  getAllEvents(userId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/api/GetEvent?userId=${userId}`);
   }
 
   getEventById(id: string): Observable<any> {
@@ -61,6 +61,16 @@ export class EventService {
 
   likeEvent(id: string, user: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/api/LikeEvent/${id}`, { user });
+  }
+  participate(eventId: string, userId: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/api/${eventId}/participate`, { user: userId });
+  }
+
+  unparticipate(eventId: string, userId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/api/${eventId}/unparticipate`, {
+      body: { user: userId },
+      responseType: 'text',
+    });
   }
 }
 

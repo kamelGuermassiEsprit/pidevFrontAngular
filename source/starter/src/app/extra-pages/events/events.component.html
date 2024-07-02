@@ -132,6 +132,9 @@
   <button class="btn btn-light" (click)="likeEvent(event, '665051098b09ea67321b1e9b')" style="align-self: start;">
     <i class="fas fa-thumbs-up" style="color: #0364e2;"></i> Like
   </button>
+  <button (click)="toggleParticipation(event._id)" class="btn btn-primary"  style="align-self: start;">
+    {{ participationStatus[event._id] ? 'Unparticipate' : 'Participate' }}
+  </button>
 </div>
               
               

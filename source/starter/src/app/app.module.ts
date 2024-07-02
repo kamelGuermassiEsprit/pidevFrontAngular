@@ -24,6 +24,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
+import { ToastrModule } from 'ngx-toastr';
 
 import {
   HttpClientModule,
@@ -64,6 +65,11 @@ export function createTranslateLoader(http: HttpClient) {
         useFactory: createTranslateLoader,
         deps: [HttpClient],
       },
+    }),
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
     }),
     // core & shared
     CoreModule,
