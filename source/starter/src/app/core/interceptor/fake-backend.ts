@@ -28,6 +28,14 @@ const users: User[] = [
     lastName:'fr',
     token:'admin-token',
   },
+  {
+    id: '6645d78f5883f203a6f10a8b' ,
+    username:'samir',
+    password:'mdp',
+    firstName:'test',
+    lastName:'fr',
+    token:'admin-token',
+  },
 
 ];
 

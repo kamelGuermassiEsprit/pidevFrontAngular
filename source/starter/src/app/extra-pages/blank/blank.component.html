@@ -48,6 +48,7 @@
           ''
           <div class="card-body">
             <p>{{ site.description }}</p>
+            <p>Address: {{ site.address }}</p>
             <p>Category: {{ site.category }}</p>
             <p>Average Rating: {{ site.average_rating }}</p>
             <div class="photos">
@@ -88,7 +89,7 @@
                     </p>
                     
                   <p class="review-comment">{{ review.comment }}</p>
-                  <div class="delete" >
+                  <div class="delete" *ngIf="review.userId === currentUserId">
                     <button class="btn btn-outline-danger" (click)="deleteSiteReview(review._id);reloadPage()">Delete</button>
                   </div>
                   

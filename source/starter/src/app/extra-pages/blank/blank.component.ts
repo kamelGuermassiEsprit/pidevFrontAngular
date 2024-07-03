@@ -35,6 +35,7 @@ export class BlankComponent implements OnInit {
   editSiteForm: any = {}; // Initialize properly
   showEditSiteModal: boolean = false;
   isSortedByRating: boolean = false;
+  currentUserId: string = JSON.parse(localStorage.getItem('currentUser') || '{}').id;
   
   
   
@@ -141,7 +142,7 @@ export class BlankComponent implements OnInit {
     }
   }
   deleteSiteReview(_id: string): void {
-    if (confirm('Are you sure you want to delete this rivew?')) {
+    if (confirm('Are you sure you want to delete this Site Review ?')) {
       this.siteReviewService.deleteSiteReview(_id).subscribe({
         next: (response) => {
           console.log('Tourist site deleted:', response);

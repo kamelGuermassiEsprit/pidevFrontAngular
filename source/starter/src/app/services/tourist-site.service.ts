@@ -34,6 +34,7 @@ export class TouristSiteService {
   filterSitesByCategory(category: string): Observable<TouristSite[]> {
     return this.http.get<TouristSite[]>(`${this.apiUrl }/category/${category}`);
   }
+  
   createTouristSite(data: FormData): Observable<TouristSite> {
     return this.http.post<TouristSite>(this.apiUrl, data);
   }
