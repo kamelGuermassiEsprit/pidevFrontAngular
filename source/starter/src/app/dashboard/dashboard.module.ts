@@ -15,10 +15,11 @@ import { FormsModule } from '@angular/forms';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { AccueilComponent } from './accueil/accueil.component';
 import { ListingDetailsComponent } from './listing-details/listing-details.component';
+import { ReseravtionsComponent } from './reseravtions/reseravtions.component';
 
 
 @NgModule({
-  declarations: [MainComponent, Dashboard2Component, ChatComponent, AccueilComponent, ListingDetailsComponent],
+  declarations: [MainComponent, Dashboard2Component, ChatComponent, AccueilComponent, ListingDetailsComponent, ReseravtionsComponent],
   imports: [
     CommonModule,
     NgbModule,

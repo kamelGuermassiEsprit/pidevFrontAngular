@@ -53,13 +53,20 @@ export class AccueilComponent implements OnInit {
         }
       );
     }
+    window.location.reload();
   }
 
-  addRating(listingId: string, rating: number): void {
+  addRating(listingId: string, rating: number | null): void {
+    if (rating === null) {
+      alert('Please select a rating.');
+      return;
+    }
+
     if (rating < 1 || rating > 5) {
       alert('Rating must be between 1 and 5');
       return;
     }
+
     this.listingService.addRating(listingId, rating).subscribe(
       (response) => {
         console.log('Rating added successfully:', response);
@@ -70,5 +77,15 @@ export class AccueilComponent implements OnInit {
         console.error('Error adding rating:', error);
       }
     );
+  }
+
+  sortListingsByRating(rating: string | null): void {
+    if (rating === null) {
+      // Handle null rating as needed
+      console.log('No rating selected.');
+      return;
+    }
+    // Process the rating value
+    console.log(`Sorting listings by rating: ${rating}`);
   }
 }

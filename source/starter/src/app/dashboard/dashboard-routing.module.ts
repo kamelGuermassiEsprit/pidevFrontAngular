@@ -5,6 +5,7 @@ import { MainComponent } from './main/main.component';
 import { ChatComponent } from './chat/chat.component';
 import { AccueilComponent } from './accueil/accueil.component';
 import { ListingDetailsComponent } from './listing-details/listing-details.component';
+import { ReseravtionsComponent } from './reseravtions/reseravtions.component';
 
 const routes: Routes = [
   {
@@ -27,6 +28,10 @@ const routes: Routes = [
   {
     path: 'accueil',
     component: AccueilComponent,
+  },
+  {
+    path: 'reservations',
+    component: ReseravtionsComponent,
   },
   {
     path: 'listing-details/:id',

@@ -67,7 +67,17 @@ export const ROUTES: RouteInfo[] = [
     badgeClass: '',
     submenu: [],
   },
-
+  {
+    path: '/dashboard/reservations',
+    title: 'reservations',
+    iconType: 'feather',
+    icon: 'trello',
+    class: '',
+    groupTitle: false,
+    badge: '',
+    badgeClass: '',
+    submenu: [],
+  },
   {
     path: '/dashboard/chat',
     title: 'chat',

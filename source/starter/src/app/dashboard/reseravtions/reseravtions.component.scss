@@ -1,0 +1,52 @@
+.reservations-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px; // Adjust the spacing between boxes
+    justify-content: center; // Center the boxes horizontally
+  }
+  
+  .reservation-box {
+    background-color: #cadff4; // Light gray background
+    border: 1px solid #ddd; // Light border
+    border-radius: 8px; // Rounded corners
+    padding: 16px; // Padding inside the box
+    width: calc(33.333% - 32px); // Adjust width for 3 boxes per row
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Add shadow for depth
+    margin: 8px; // Margin around each box
+    transition: transform 0.3s, box-shadow 0.3s; // Smooth transition for hover effects
+  }
+  
+  .reservation-box:hover {
+    transform: translateY(-5px); // Slight lift effect on hover
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); // Enhanced shadow on hover
+  }
+  
+  .reservation-box p {
+    margin: 8px 0; // Spacing between paragraphs
+  }
+  
+  .btn-danger {
+    background-color: #dc3545; // Bootstrap red color for danger button
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .btn-danger:hover {
+    background-color: #c82333; // Darker red on hover
+  }
+  
+  @media (max-width: 768px) {
+    .reservation-box {
+      width: calc(50% - 32px); // Adjust width for 2 boxes per row on smaller screens
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .reservation-box {
+      width: 100%; // Full width for single box per row on very small screens
+    }
+  }
+  
