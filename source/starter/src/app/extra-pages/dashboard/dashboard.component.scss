@@ -1,0 +1,33 @@
+.card {
+    border-radius: 10px;
+    transition: all 0.3s ease-in-out;
+    &:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
+  
+  .card-header {
+    border-bottom: 0;
+    border-radius: 10px 10px 0 0;
+  }
+  
+  .card-title {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+  }
+  
+  .card-text {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+  }
+  
+  .photos {
+    img {
+      transition: transform 0.2s ease-in-out;
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+  

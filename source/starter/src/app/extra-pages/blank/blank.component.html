@@ -38,7 +38,7 @@
       <div class="col-12 col-md-12 col-lg-12" *ngFor="let site of sites">
         <div class="card">
           <div class="card-header">
-            <h4>{{ site.name }}</h4>
+            <h4 (click)="handleSiteClick(site)">{{ site.name }}</h4>
             <button class="btn btn-outline-success" (click)="openTicketModal(site)">Generate Ticket</button>
             <div style=" margin-left: auto">
             <button class="btn btn-outline-warning" (click)="openEditSiteModal(site)">Edit</button>
@@ -50,7 +50,7 @@
             <p>{{ site.description }}</p>
             <p>Address: {{ site.address }}</p>
             <p>Category: {{ site.category }}</p>
-            <p>Average Rating: {{ site.average_rating }}</p>
+            <p>Average Rating: {{ site.average_rating | customRating }}</p>
             <div class="photos">
               <img *ngFor="let photo of site.photos" [src]="'http://localhost:5001/' + photo" alt="{{ site.name }}"class="img-fluid"style="width: 200px; height: auto;">
             </div>

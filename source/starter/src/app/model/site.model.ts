@@ -20,4 +20,5 @@ export interface TouristSite {
     coordinates: number[];
   };
   reviews?: Review[];
+  visits: number;  // Add this line
 }

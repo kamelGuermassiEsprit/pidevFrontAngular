@@ -7,6 +7,7 @@ import { TicketService } from '../../services/ticket-service.service';  // Impor
 import { saveAs } from 'file-saver'; // Import file-saver for handling downloads
 import * as L from 'leaflet';
 import { HttpClient } from '@angular/common/http';
+import { PageViewservice } from 'src/app/services/page-view.service';
 
 
 @Component({
@@ -57,6 +58,7 @@ export class BlankComponent implements OnInit {
     private siteReviewService: SiteReviewService,
     private ticketService: TicketService,
     private http: HttpClient,
+    private pageviewservice: PageViewservice,
   
    
   ) { }
@@ -64,6 +66,18 @@ export class BlankComponent implements OnInit {
   ngOnInit(): void {
     this.fetchSites();
   }
+  handleSiteClick(site: TouristSite): void {
+    console.log(`Site clicked: ${site.name}`);
+    this.pageviewservice.logPageView(site.name).subscribe({
+      next: (response) => {
+        console.log('Page view logged:', response);
+      },
+      error: (error) => {
+        console.error('Error logging page view:', error);
+      }
+    });
+  }
+  
   reloadPage():void {
     window.location.reload();
   }
@@ -323,7 +337,9 @@ searchSites(name: string): void {
       }
     });
   }
+  
 }
+
 
  
 

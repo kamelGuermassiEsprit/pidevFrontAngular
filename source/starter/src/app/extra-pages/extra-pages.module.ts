@@ -6,9 +6,12 @@ import { ExtraPagesRoutingModule } from './extra-pages-routing.module';
 import { BlankComponent } from './blank/blank.component';
 import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CustomRatingPipe } from './custom-rating.pipe';
+import { DashboardComponent } from './dashboard/dashboard.component';
+
 
 @NgModule({
-  declarations: [BlankComponent],
+  declarations: [BlankComponent, CustomRatingPipe, DashboardComponent, ],
   imports: [CommonModule, ExtraPagesRoutingModule, NgbModule,FormsModule,MatIconModule,ReactiveFormsModule],
 })
 export class ExtraPagesModule {}

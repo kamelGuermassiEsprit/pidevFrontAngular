@@ -1,0 +1,55 @@
+<section class="main-content">
+  <ul class="breadcrumb breadcrumb-style">
+    <li class="breadcrumb-item">
+      <h5 class="page-title m-b-0">Dashboard</h5>
+    </li>
+    <li class="breadcrumb-item bcrumb-1">
+      <a routerLink="/dashboard/main">
+        <i class="fas fa-home font-17"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item">Dashboard</li>
+  </ul>
+  <div class="section-body">
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <h4>Most Visited Site</h4>
+        <div *ngIf="mostVisitedSite" class="card">
+          <div class="card-header">
+            <h4>{{ mostVisitedSite.siteId.name }}</h4>
+          </div>
+          <div class="card-body">
+            <p>{{ mostVisitedSite.siteId.description }}</p>
+            <p>Address: {{ mostVisitedSite.siteId.address }}</p>
+            <p>Category: {{ mostVisitedSite.siteId.category }}</p>
+            <p>Visits: {{ mostVisitedSite.viewCount }}</p>
+            <div class="photos">
+              <a *ngFor="let photo of mostVisitedSite.siteId.photos" [href]="'http://localhost:5001/' + photo" data-lightbox="mostVisitedSite.siteId.name" [attr.data-title]="mostVisitedSite.siteId.name">
+                <img [src]="'http://localhost:5001/' + photo" alt="{{ mostVisitedSite.siteId.name }}" class="img-fluid" style="width: 200px; height: auto;">
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <h4>Site Rankings</h4>
+        <div *ngFor="let site of siteRankings" class="card">
+          <div class="card-header">
+            <h4>{{ site.siteId.name }}</h4>
+          </div>
+          <div class="card-body">
+            <p>{{ site.siteId.description }}</p>
+            <p>Address: {{ site.siteId.address }}</p>
+            <p>Category: {{ site.siteId.category }}</p>
+            <p>Visits: {{ site.viewCount }}</p>
+            <div class="photos">
+              <a *ngFor="let photo of site.siteId.photos" [href]="'http://localhost:5001/' + photo" data-lightbox="site.siteId.name" [attr.data-title]="site.siteId.name">
+                <img [src]="'http://localhost:5001/' + photo" alt="{{ site.siteId.name }}" class="img-fluid" style="width: 200px; height: auto;">
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
