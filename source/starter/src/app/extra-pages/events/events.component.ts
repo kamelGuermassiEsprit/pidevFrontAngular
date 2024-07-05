@@ -39,7 +39,7 @@ currentUser = { _id: '66504e978b09ea67321b1e8e'}; //  current user
   }
 
   loadEvents() {
-    this.eventService.getAllEvents(this.userId).subscribe(events => {
+    this.eventService.getEventsWithParticipations(this.userId).subscribe(events => {
       this.events = events;
       this.initializeParticipationStatus();
     });

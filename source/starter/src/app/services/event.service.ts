@@ -16,6 +16,9 @@ export class EventService {
   getAllEvents(userId: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/api/GetEvent?userId=${userId}`);
   }
+  getEventsWithParticipations(userId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/api/browse?userId=${userId}`);
+  }
 
   getEventById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/api/GetEvent/${id}`);
