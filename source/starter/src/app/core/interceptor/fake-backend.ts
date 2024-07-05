@@ -36,8 +36,32 @@ const users: User[] = [
     lastName: 'lastName user3',
     token: 'admin-token',
   },
-];
 
+  {
+    id: '6645d659587b926668ca3365',
+    username: 'test',
+    password: 'hhahah',
+    firstName: 'test',
+    lastName: 'fr',
+    token: 'admin-token',
+  },
+  {
+    id: '6645d7745883f203a6f10a89',
+    username: 'ala',
+    password: 'mdp',
+    firstName: 'ala',
+    lastName: 'fr',
+    token: 'admin-token',
+  },
+  {
+    id: '6645d78f5883f203a6f10a8b',
+    username: 'samir',
+    password: 'mdp',
+    firstName: 'test',
+    lastName: 'fr',
+    token: 'admin-token',
+  },
+];
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
   constructor() {} // Inject the service

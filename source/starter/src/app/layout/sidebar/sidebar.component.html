@@ -53,7 +53,7 @@
                     <!-- Third level menu -->
                     <ul class="ml-menu-3" *ngIf="sidebarSubItem2.submenu.length > 0">
                       <li *ngFor="let sidebarSubItem3 of sidebarSubItem2.submenu"
-                        [routerLinkActive]="sidebarSubItem3.submenu.length > 0 ? '' : 'active'">
+                        [routerLinkActive]="sidebarSubItem3.submenu.length > 0 ? '' : ''">
                         <a [routerLink]="sidebarSubItem3.submenu.length > 0 ? null : [sidebarSubItem3.path]"
                           (click)="callToggleMenu($event,sidebarSubItem3.submenu.length)"
                           [ngClass]="[sidebarSubItem3.class]">

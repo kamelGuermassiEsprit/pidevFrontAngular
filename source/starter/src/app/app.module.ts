@@ -5,7 +5,7 @@ import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './layout/header/header.component';
@@ -20,6 +20,7 @@ import { fakeBackendProvider } from './core/interceptor/fake-backend';
 import { ErrorInterceptor } from './core/interceptor/error.interceptor';
 import { JwtInterceptor } from './core/interceptor/jwt.interceptor';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { MatIconModule } from '@angular/material/icon';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -54,6 +55,9 @@ export function createTranslateLoader(http: HttpClient) {
     HttpClientModule,
     ReactiveFormsModule,
     NgScrollbarModule,
+    FormsModule,
+    MatIconModule,
+    
     LoadingBarRouterModule,
     TranslateModule.forRoot({
       loader: {

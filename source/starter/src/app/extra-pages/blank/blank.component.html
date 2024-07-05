@@ -1,27 +1,281 @@
 <section class="main-content">
-  <ul class="breadcrumb breadcrumb-style ">
+  <ul class="breadcrumb breadcrumb-style">
     <li class="breadcrumb-item">
-      <h5 class="page-title m-b-0">Blank</h5>
+      <h5 class="page-title m-b-0">Tourist Sites</h5>
     </li>
     <li class="breadcrumb-item bcrumb-1">
       <a routerLink="/dashboard/main">
         <i class="fas fa-home font-17"></i></a>
     </li>
-    <li class="breadcrumb-item">Extra</li>
-    <li class="breadcrumb-item">Blank</li>
+    <li class="breadcrumb-item">Tourist Sites</li>
   </ul>
   <div class="section-body">
+    <div class="row mb-3">
+      <div class="search-container">
+        <input #searchBox type="text" class="form-control search-input" placeholder="Rechercher un site" (keyup)="searchSites(searchBox.value)">
+        <i class="fa fa-search search-icon" (click)="searchSites(searchBox.value)"></i>
+      
+</div>
+
+      <div *ngIf="noSitesFound">No sites found.</div>
+      <div class="col-md-6 d-flex align-items-center">
+        <select class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" width="1000pxS" [(ngModel)]="selectedCategory" (change)="filterSitesByCategory()">
+          <option class="dropdown-item" value="">All Categories</option>
+          <option class="dropdown-item" value="Historical">Historical</option>
+          <option class="dropdown-item" value="Natural">Natural</option>
+          <option class="dropdown-item" value="Cultural">Cultural</option>
+        </select>
+        
+          <!-- Existing search and category filter elements -->
+          <button class="btn btn-outline-primary" (click)="sortByRating()">Sort by Rating</button>
+      
+      </div>
+    </div>
+
+        <button class="btn btn-primary mb-3" (click)="openCreateSiteModal()">Create Tourist Site</button>
+
     <div class="row">
-      <div class="col-12 col-md-12 col-lg-12">
+      <div class="col-12 col-md-12 col-lg-12" *ngFor="let site of sites">
         <div class="card">
           <div class="card-header">
-            <h4>Card Title</h4>
-          </div>
+            <h4 (click)="handleSiteClick(site)">{{ site.name }}</h4>
+            <button class="btn btn-outline-success" (click)="openTicketModal(site)">Generate Ticket</button>
+            <div style=" margin-left: auto">
+            <button class="btn btn-outline-warning" (click)="openEditSiteModal(site)">Edit</button>
+             <button class="btn btn-outline-danger" (click)="deleteSite(site.name);reloadPage()">Delete</button>
+            </div>
+        </div>
+          ''
           <div class="card-body">
-            <!-- Add content here -->
+            <p>{{ site.description }}</p>
+            <p>Address: {{ site.address }}</p>
+            <p>Category: {{ site.category }}</p>
+            <p>Average Rating: {{ site.average_rating | customRating }}</p>
+            <div class="photos">
+              <!-- Make photos clickable to open in a lightbox -->
+              <a *ngFor="let photo of site.photos" 
+                 [href]="'http://localhost:5001/' + photo" 
+                 data-lightbox="site-photos" 
+                 [attr.data-title]="site.name">
+                <img [src]="'http://localhost:5001/' + photo" 
+                     alt="{{ site.name }}" 
+                     class="img-fluid" 
+                     style="width: 200px; height: auto;">
+              </a>
+            </div>
+            <div class="review-section">
+              <h5>Leave a Review</h5>
+              <div class="rating">
+                <span *ngFor="let star of [1, 2, 3, 4, 5]" 
+                      (click)="rate(site._id, star)" 
+                      [ngClass]="{'filled': star <= (currentRatingMap.get(site._id) || 0)}">
+                  &#9733;
+                </span>
+              </div>
+              <textarea class="form-control" 
+                        [ngModel]="reviewMap.get(site._id)?.comment || ''"
+                        (ngModelChange)="updateComment(site._id, $event)" 
+                        placeholder="Write your comment..."></textarea>
+              <button class="btn btn-primary mt-2"  (click)="submitReview(site);reloadPage()">Submit Review</button>
+              <button class="btn btn-secondary mt-2" (click)="toggleComments(site._id)">
+                {{ showCommentsMap.get(site._id) ? 'Hide Comments' : 'Show Comments' }}
+              </button>
+              <div *ngIf="showCommentsMap.get(site._id)" class="existing-reviews">
+                <h5>Reviews</h5>
+                <div *ngFor="let review of site.reviews">
+                  
+                  <p class="review-header">
+                   <strong>{{ review.userName }} </strong>
+                   
+                      <span class="rating">
+                        <span *ngFor="let star of [1, 2, 3, 4, 5]" 
+                              [ngClass]="{'filled': star <= review.rating}">
+                          &#9733;
+                        </span>
+                        
+                    </span> 
+                    
+                    </p>
+                    
+                  <p class="review-comment">{{ review.comment }}</p>
+                  <div class="delete" *ngIf="review.userId === currentUserId">
+                    <button class="btn btn-outline-danger" (click)="deleteSiteReview(review._id);reloadPage()">Delete</button>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-primary mt-2" (click)="openMapModal(site)">Show on Map</button>
           </div>
         </div>
       </div>
     </div>
   </div>
-</section>
+  <div class="modal small-modal" tabindex="-1" role="dialog" [ngClass]="{'show': showEditSiteModal}" [style.display]="showEditSiteModal ? 'block' : 'none'">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Tourist Site</h5>
+          <button type="button" class="close" (click)="closeEditSiteModal()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="submitEditSiteForm()" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="editName">Name</label>
+              <input type="text" class="form-control form-control-sm" id="editName" [(ngModel)]="editSiteForm.name" name="editName" required>
+            </div>
+            <div class="form-group">
+              <label for="editDescription">Description</label>
+              <textarea class="form-control form-control-sm" id="editDescription" [(ngModel)]="editSiteForm.description" name="editDescription" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="editAddress">Address</label>
+              <input type="text" class="form-control form-control-sm" id="editAddress" [(ngModel)]="editSiteForm.address" name="editAddress" required>
+            </div>
+            <div class="form-group">
+              <label for="editCategory">Category</label>
+              <select class="form-control form-control-sm" id="editCategory" [(ngModel)]="editSiteForm.category" name="editCategory" required>
+                <option value="Historical">Historical</option>
+                <option value="Natural">Natural</option>
+                <option value="Cultural">Cultural</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="editPhotos">Photos</label>
+              <input type="file" class="form-control form-control-sm" id="editPhotos" (change)="onEditFileChange($event)" multiple>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">Update</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal small-modal" tabindex="-1" role="dialog" [ngClass]="{'show': showCreateSiteModal}" [style.display]="showCreateSiteModal ? 'block' : 'none'">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Create Tourist Site</h5>
+          <button type="button" class="close" (click)="closeCreateSiteModal()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="submitCreateSiteForm()" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" class="form-control form-control-sm" id="name" [(ngModel)]="createSiteForm.name" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea class="form-control form-control-sm" id="description" [(ngModel)]="createSiteForm.description" name="description" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="address">Address</label>
+              <input type="text" class="form-control form-control-sm" id="address" [(ngModel)]="createSiteForm.address" name="address" required>
+            </div>
+            <div class="form-group">
+              <label for="category">Category</label>
+              <select class="form-control form-control-sm" id="category" [(ngModel)]="createSiteForm.category" name="category" required>
+                <option value="Historical">Historical</option>
+                <option value="Natural">Natural</option>
+                <option value="Cultural">Cultural</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="photos">Photos</label>
+              <input type="file" class="form-control form-control-sm" id="photos" (change)="onFileChange($event)" multiple>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">Create</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal small-modal" tabindex="-1" role="dialog" [ngClass]="{'show': showTicketModal}" [style.display]="showTicketModal ? 'block' : 'none'">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Generate Ticket</h5>
+          <button type="button" class="close" (click)="closeTicketModal()" aria-label="Close">
+            
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="submitTicketForm()">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" class="form-control" id="name" [(ngModel)]="ticketForm.name" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email (Optional)</label>
+              <input type="email" class="form-control" id="email" [(ngModel)]="ticketForm.email" name="email">
+            </div>
+            <button type="submit" class="btn btn-primary">Generate Ticket</button>
+           </form>
+           
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal small-modal" tabindex="-1" role="dialog" [ngClass]="{'show': showMapModal}" [style.display]="showMapModal ? 'block' : 'none'">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Map</h5>
+            <button type="button" class="close" (click)="closeMapModal()" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div id="map" style="height: 400px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+     
+
+<style>
+  .rating {
+    display: flex;
+    justify-content: flex-start;
+  }
+  .rating span {
+    font-size: 24px;
+    cursor: pointer;
+    color: #ddd; /* default star color */
+  }
+  .rating span.filled {
+    color: gold; /* gold color for filled stars */
+  }
+  .small-modal .modal-dialog {
+    max-width: 400px;
+    margin: 20px auto;
+  }
+
+  .small-modal .modal-content {
+    padding: 15px;
+  }
+
+  .small-modal .form-group {
+    margin-bottom: 10px;
+  }
+
+  .small-modal .form-control {
+    font-size: 14px;
+    padding: 5px;
+  }
+
+  .small-modal .btn {
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+
+  
+
+</style>
