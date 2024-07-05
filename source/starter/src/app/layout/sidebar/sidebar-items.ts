@@ -140,7 +140,7 @@ export const ROUTES: RouteInfo[] = [
   },
   {
     path: '',
-    title: 'Events',
+    title: 'Entertament Interface',
     iconType: 'feather',
     icon: 'layout',
     class: 'menu-toggle',
@@ -148,6 +148,17 @@ export const ROUTES: RouteInfo[] = [
     badge: '',
     badgeClass: '',
     submenu: [
+      {
+      path: '/extra-pages/blank',
+        title: 'Tourist Sites',
+        iconType: '',
+        icon: '',
+        class: 'ml-menu',
+        groupTitle: false,
+        badge: '',
+        badgeClass: '',
+        submenu: [],
+      },
      
       {
         path: '/Events/EventMangement',
