@@ -10,11 +10,16 @@ import { CustomRatingPipe } from './custom-rating.pipe';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NgChartsModule } from 'ng2-charts';
 
-
-
-
 @NgModule({
-  declarations: [BlankComponent, CustomRatingPipe, DashboardComponent, ],
-  imports: [CommonModule,NgChartsModule, ExtraPagesRoutingModule, NgbModule,FormsModule,MatIconModule,ReactiveFormsModule],
+  declarations: [BlankComponent, CustomRatingPipe, DashboardComponent],
+  imports: [
+    CommonModule,
+    NgChartsModule,
+    ExtraPagesRoutingModule,
+    NgbModule,
+    FormsModule,
+    MatIconModule,
+    ReactiveFormsModule,
+  ],
 })
 export class ExtraPagesModule {}

@@ -5,36 +5,37 @@ import { map } from 'rxjs/operators';
 import { TouristSite } from '../model/site.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TouristSiteService {
-  private apiUrl  = 'http://localhost:5001/nomadNest/touristSite';
+  private apiUrl = 'http://localhost:5001/nomadNest/touristSite';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getAllSites(): Observable<TouristSite[]> {
-    return this.http.get<TouristSite[]>(this.apiUrl );
+    return this.http.get<TouristSite[]>(this.apiUrl);
   }
-  
 
   getSitesSortedByRating(): Observable<TouristSite[]> {
-    return this.http.get<TouristSite[]>(`${this.apiUrl }/sites/sortedByRating`);
+    return this.http.get<TouristSite[]>(`${this.apiUrl}/sites/sortedByRating`);
   }
 
   getSiteById(siteId: string): Observable<TouristSite> {
-    return this.http.get<TouristSite>(`${this.apiUrl }/${siteId}`);
+    return this.http.get<TouristSite>(`${this.apiUrl}/${siteId}`);
   }
 
   searchSites(name: string): Observable<TouristSite[]> {
-    return this.http.get<TouristSite[]>(`${this.apiUrl}/${encodeURIComponent(name)}`)
-      .pipe(map(response => Array.isArray(response) ? response : [response]));
+    return this.http
+      .get<TouristSite[]>(`${this.apiUrl}/${encodeURIComponent(name)}`)
+      .pipe(
+        map((response) => (Array.isArray(response) ? response : [response]))
+      );
   }
-
 
   filterSitesByCategory(category: string): Observable<TouristSite[]> {
-    return this.http.get<TouristSite[]>(`${this.apiUrl }/category/${category}`);
+    return this.http.get<TouristSite[]>(`${this.apiUrl}/category/${category}`);
   }
-  
+
   createTouristSite(data: FormData): Observable<TouristSite> {
     return this.http.post<TouristSite>(this.apiUrl, data);
   }

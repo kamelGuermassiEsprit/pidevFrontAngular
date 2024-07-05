@@ -5,15 +5,18 @@ import { Review } from '../model/review.model';
 import { TouristSite } from '../model/site.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SiteReviewService {
-  private apiUrl = 'http://localhost:5001/nomadNest/siteReview' ;
+  private apiUrl = 'http://localhost:5001/nomadNest/siteReview';
 
   constructor(private http: HttpClient) {}
 
   createSiteReview(siteName: string, review: Review): Observable<Review> {
-    return this.http.post<Review>(`${this.apiUrl}/${encodeURIComponent(siteName)}`, review);
+    return this.http.post<Review>(
+      `${this.apiUrl}/${encodeURIComponent(siteName)}`,
+      review
+    );
   }
 
   getSiteReviewsBySiteId(siteId: string): Observable<Review[]> {
@@ -21,7 +24,9 @@ export class SiteReviewService {
   }
 
   getSiteReviewsBySiteName(siteName: string): Observable<Review[]> {
-    return this.http.get<Review[]>(`${this.apiUrl}/siteName/${encodeURIComponent(siteName)}`);
+    return this.http.get<Review[]>(
+      `${this.apiUrl}/siteName/${encodeURIComponent(siteName)}`
+    );
   }
 
   getSiteReviewsByUserId(userId: string): Observable<Review[]> {
@@ -42,6 +47,3 @@ export class SiteReviewService {
     return this.http.get<any>(`${this.apiUrl}/sites/sorted-by-comments`);
   }
 }
-
- 
-
