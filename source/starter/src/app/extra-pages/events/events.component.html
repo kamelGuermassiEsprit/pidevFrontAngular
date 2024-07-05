@@ -1,14 +1,16 @@
 <section class="main-content">
-  <ul class="breadcrumb breadcrumb-style ">
+  <ul class="breadcrumb breadcrumb-style">
     <li class="breadcrumb-item">
       <h5 class="page-title m-b-0">Events</h5>
     </li>
     <li class="breadcrumb-item">Events List</li>
     <li class="breadcrumb-item bcrumb-1">
       <a routerLink="/dashboard/main">
-        <i class="fas fa-home font-17"></i></a>
+        <i class="fas fa-home font-17"></i>
+      </a>
     </li>
   </ul>
+  
   <div>
     <form class="mb-3 form-inline me-auto" (submit)="searchEvent()">
       <div class="search-element d-flex">
@@ -22,40 +24,46 @@
 
   <div *ngIf="searchPerformed; else showEvents">
     <div *ngIf="searchResults.length; else noResults">
-      <div *ngFor="let result of searchResults" class="col-md-12 col-lg-8 col-xl-8 ">
+      <div *ngFor="let result of searchResults" class="col-md-12 col-lg-8 col-xl-8 mb-4">
         <div class="card">
           <div class="card-header">
-            <h4><a [routerLink]="['/Events/eventdetails', result._id]">{{ result.title }}</a></h4>          
+            <h4><a [routerLink]="['/Events/eventdetails', result._id]">{{ result.title }}</a></h4>
           </div>
           <div class="card-body">
             <img [src]="'http://localhost:5001/uploads/' + result.image" alt="Event image" class="card-img-top mb-3">
             <p>{{ result.description }}</p>
-            <p><small class="text-muted">Country : {{result.country}}</small></p>
-            <p><small class="text-muted">City : {{ result.city }}</small></p>
-            <p><small class="text-muted">Location : {{ result.location }}</small></p>
+            <p><small class="text-muted">Country: {{ result.country }}</small></p>
+            <p><small class="text-muted">City: {{ result.city }}</small></p>
+            <p><small class="text-muted">Location: {{ result.location }}</small></p>
             <p><small class="text-muted">Start: {{ result?.date_debut | date:'d MMMM y, h:mm a' }}</small></p>
             <p><small class="text-muted">End: {{ result?.date_fin | date:'d MMMM y, h:mm a' }}</small></p>
             <p><small class="text-muted">{{ result.etat }}</small></p>
-                          
-     <div class="icon-container" style="display: flex; flex-direction: column; gap: 30px;">
-      <div style="display: flex; align-items: center; gap: 3px;">
-        <button class="btn-primary" (click)="openModal(result,content)" style="background-color: transparent; border: none; color: #0364e2; display: flex; align-items: center;">
-          <i class="fas fa-thumbs-up"></i>
-          <span>{{ result.likes }}</span>
-        </button>
-        <button class="btn-primary" (click)="commentsVisible = !commentsVisible" style="background-color: transparent; border: none; color: #63E6BE; display: flex; align-items: center;">
-          <i class="fas fa-comment-dots fa-lg"></i>
-          <span>{{ result.comments.length }}</span>
-        </button>
-      </div>
-      <button class="btn btn-light" (click)="likeEvent(result, '665051098b09ea67321b1e9b')" style="align-self: start;">
-        <i class="fas fa-thumbs-up" style="color: #0364e2;"></i> Like
-      </button>
-    </div>
-
+            
+            <!-- Adjusted structure starts here -->
+            <div class="d-flex align-items-center gap-2">
+              <button class="btn-primary" (click)="openModal(result, content)" style="background-color: transparent; border: none; color: #0364e2; display: flex; align-items: center;">
+                <i class="fas fa-thumbs-up"></i>
+                <span>{{ result.likes }}</span>
+              </button>
+              <button class="btn-primary" (click)="commentsVisible = !commentsVisible" style="background-color: transparent; border: none; color: #63E6BE; display: flex; align-items: center;">
+                <i class="fas fa-comment-dots fa-lg"></i>
+                <span>{{ result.comments.length }}</span>
+              </button>
+            </div>
+            
+            <div class="d-flex align-items-center mt-3">
+              <button class="btn btn-light btn-sm mr-2 mt-3" (click)="likeEvent(event, currentUser._id)" style="align-self: start; margin-right: 10px;">
+                <i class="fas fa-thumbs-up" style="color: #0364e2;"></i> Like
+              </button>
+              <button (click)="toggleParticipation(result._id)" class="btn btn-primary btn-sm mr-2 mt-3">
+                {{ participationStatus[result._id] ? 'Unparticipate' : 'Participate' }}
+              </button>
+            </div>
+        
+            
             <ng-template #content let-modal>
               <div class="modal-header justify-content-between">
-                <h4 class="modal-title" id="modal-basic-title">Likes</h4>    
+                <h4 class="modal-title" id="modal-basic-title">Likes</h4>
                 <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -64,134 +72,111 @@
                 <p>{{ likers }}</p>
               </div>
             </ng-template>
-
-
-            <div *ngIf="commentsVisible">
-              
-              <div class="media-body">
-                <div *ngFor="let comment of result.comments" class="media mt-3 border p-3 mb-5">
-                  <img [src]="'http://localhost:5001/' + comment.user.image" class="mr-3 mt-1 card" style="border: 2px solid #000;" alt="User Image" width="60">
-                  <div class="media-body">
             
-          
-     <h4 style="font-size: 0.9em;">
-                  {{ comment.user.first_name }} {{comment.user.last_name}} 
-                  <small><i>Posted on {{ comment.date | date }}</i></small>
-                </h4>
-                <p style="font-size: 0.9em;">{{ comment.text }}</p>
+            <div *ngIf="commentsVisible">
+              <div class="media-body">
+                <div *ngFor="let comment of result.comments" class="media mt-3 border p-3 mb-3">
+                  <img [src]="'http://localhost:5001/' + comment.user.image" class="mr-3 mt-1 card" alt="User Image" width="60">
+                  <div class="media-body">
+                    <h4 style="font-size: 0.9em;">
+                      {{ comment.user.first_name }} {{comment.user.last_name}}
+                      <small><i>Posted on {{ comment.date | date }}</i></small>
+                    </h4>
+                    <p style="font-size: 0.9em;">{{ comment.text }}</p>
+                  </div>
                 </div>
               </div>
-              </div>
-              <form class="mt-3 mb-5" (submit)="addComment(commentText.value, event._id)">
+              <form class="mt-3 mb-3" (submit)="addComment(commentText.value, result._id)">
                 <div class="form-group">
                   <input type="text" class="form-control" #commentText placeholder="Add a comment">
                 </div>
                 <button type="submit" class="btn btn-primary">Add Comment</button>
               </form>
-            
             </div>
-
           </div>
         </div>
       </div>
     </div>
+    
     <ng-template #noResults>
-      <p style="color: red; font-size: 20px; font-weight: bold; text-align: center;">No events found</p>
+      <p class="text-danger font-weight-bold text-center" style="font-size: 20px;">No events found</p>
     </ng-template>
   </div>
-
+  
   <ng-template #showEvents>
     <div class="section-body">
       <div class="row">
-        <div *ngFor="let event of events" class="col-md-12 col-lg-8 col-xl-8 ">
+        <div *ngFor="let event of events" class="col-md-12 col-lg-8 col-xl-8 mb-4">
           <div class="card">
             <div class="card-header">
-              <h4><a [routerLink]="['/Events/eventdetails', event._id]">{{ event.title }}</a></h4>          
+              <h4><a [routerLink]="['/Events/eventdetails', event._id]">{{ event.title }}</a></h4>
             </div>
             <div class="card-body">
               <img [src]="'http://localhost:5001/uploads/' + event.image" alt="Event image" class="card-img-top mb-3">
               <p>{{ event.description }}</p>
-              <p><small class="text-muted">Country : {{event.country}}</small></p>
-              <p><small class="text-muted">City : {{event.city}}</small> </p>
-              <p><small class="text-muted">Location : {{ event.location }}</small></p>
+              <p><small class="text-muted">Country: {{ event.country }}</small></p>
+              <p><small class="text-muted">City: {{ event.city }}</small></p>
+              <p><small class="text-muted">Location: {{ event.location }}</small></p>
               <p><small class="text-muted">Start: {{ event?.date_debut | date:'d MMMM y, h:mm a' }}</small></p>
               <p><small class="text-muted">End: {{ event?.date_fin | date:'d MMMM y, h:mm a' }}</small></p>
               <p><small class="text-muted">{{ event.etat }}</small></p>
               
-     <div class="icon-container" style="display: flex; flex-direction: column; gap: 30px;">
-  <div style="display: flex; align-items: center; gap: 3px;">
-    <button class="btn-primary" (click)="openModal(event,content)" style="background-color: transparent; border: none; color: #0364e2; display: flex; align-items: center;">
-      <i class="fas fa-thumbs-up"></i>
-      <span>{{ event.likes }}</span>
-    </button>
-    <button class="btn-primary" (click)="commentsVisible = !commentsVisible" style="background-color: transparent; border: none; color: #63E6BE; display: flex; align-items: center;">
-      <i class="fas fa-comment-dots fa-lg"></i>
-      <span>{{ event.comments.length }}</span>
-    </button>
-  </div>
-  <button class="btn btn-light" (click)="likeEvent(event, '665051098b09ea67321b1e9b')" style="align-self: start;">
-    <i class="fas fa-thumbs-up" style="color: #0364e2;"></i> Like
-  </button>
-  <button (click)="toggleParticipation(event._id)" class="btn btn-primary"  style="align-self: start;">
-    {{ participationStatus[event._id] ? 'Unparticipate' : 'Participate' }}
-  </button>
-</div>
+              <div class="icon-container d-flex gap-3">
+                <div class="d-flex align-items-center gap-2">
+                  <button class="btn-primary" (click)="openModal(event, content)" style="background-color: transparent; border: none; color: #0364e2; display: flex; align-items: center;">
+                    <i class="fas fa-thumbs-up"></i>
+                    <span>{{ event.likes }}</span>
+                  </button>
+                  <button class="btn-primary" (click)="commentsVisible = !commentsVisible" style="background-color: transparent; border: none; color: #63E6BE; display: flex; align-items: center;">
+                    <i class="fas fa-comment-dots fa-lg"></i>
+                    <span>{{ event.comments.length }}</span>
+                  </button>
+                </div>
+              </div>
               
+              <!-- Moved the buttons here, under the other fields and beside each other -->
+              <div class="d-flex align-items-center mt-3">
+                <button class="btn btn-light btn-sm mr-2 mt-3" (click)="likeEvent(event, currentUser._id)" style="align-self: start; margin-right: 10px;">
+                  <i class="fas fa-thumbs-up" style="color: #0364e2;"></i> Like
+                </button>
+                <button (click)="toggleParticipation(event._id)" class="btn btn-primary btn-sm mt-3">
+                  {{ participationStatus[event._id] ? 'Unparticipate' : 'Participate' }}
+                </button>
+              </div>
+            
               
-      
-                
-                
-                <ng-template #content let-modal>
-                  <div class="modal-header justify-content-between">
-                    <h4 class="modal-title" id="modal-basic-title">Likers</h4>    
-                    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                     <div class="modal-body">
-                       <p>{{ likers }}</p>
-                     </div>
-                   </ng-template>
-                
-
               <ng-template #content let-modal>
                 <div class="modal-header justify-content-between">
-                  <h4 class="modal-title" id="modal-basic-title">Likes</h4>    
+                  <h4 class="modal-title" id="modal-basic-title">Likes</h4>
                   <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div class="modal-body">
-                  <p>{{ likers }}</p>
+                  <p *ngFor="let liker of event.likers">{{ liker.first_name }} {{ liker.last_name }}</p>
                 </div>
               </ng-template>
-
-     
+              
               <div *ngIf="commentsVisible">
-              
                 <div class="media-body">
-                  <div *ngFor="let comment of event.comments" class="media mt-3 border p-3 mb-5">
-                    <img [src]="'http://localhost:5001/' + comment.user.image" class="mr-3 mt-1 card" style="border: 2px solid #000;" alt="User Image" width="60">
+                  <div *ngFor="let comment of event.comments" class="media mt-3 border p-3 mb-3">
+                    <img [src]="'http://localhost:5001/' + comment.user.image" class="mr-3 mt-1 card" alt="User Image" width="60">
                     <div class="media-body">
-              
-            
-       <h4 style="font-size: 0.9em;">
-                    {{ comment.user.first_name }} {{comment.user.last_name}} 
-                    <small><i>Posted on {{ comment.date | date }}</i></small>
-                  </h4>
-                  <p style="font-size: 0.9em;">{{ comment.text }}</p>
+                      <h4 style="font-size: 0.9em;">
+                        {{ comment.user.first_name }} {{comment.user.last_name}}
+                        <small><i>Posted on {{ comment.date | date }}</i></small>
+                      </h4>
+                      <p style="font-size: 0.9em;">{{ comment.text }}</p>
+                    </div>
                   </div>
                 </div>
-                </div>
-                <form class="mt-3 mb-5" (submit)="addComment(commentText.value, event._id)">
+                <form class="mt-3 mb-3" (submit)="addComment(commentText.value, event._id)">
                   <div class="form-group">
                     <input type="text" class="form-control" #commentText placeholder="Add a comment">
                   </div>
                   <button type="submit" class="btn btn-primary">Add Comment</button>
                 </form>
               </div>
-
-              
             </div>
           </div>
         </div>

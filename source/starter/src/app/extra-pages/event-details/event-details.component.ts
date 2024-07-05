@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from "../../services/event.service";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { getNames } from 'country-list';
+import { ToastrService } from 'ngx-toastr';
 
 interface Comment {
   user: any;
@@ -23,12 +24,14 @@ export class EventDetailsComponent implements OnInit {
   imageFile: File = new File([], '');
  commentsVisible = false;
  countries = getNames();
+ modalReference: any;
+
 
  onImageChange(event: any) {
     this.imageFile = event.target.files[0];
   }
 
-  constructor(private eventService: EventService,private modalService: NgbModal, private router: Router, private route: ActivatedRoute) { }
+  constructor(private eventService: EventService,private modalService: NgbModal, private router: Router, private route: ActivatedRoute,  private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params['id'];
@@ -88,17 +91,26 @@ export class EventDetailsComponent implements OnInit {
   
   deleteEvent() {
     this.eventService.deleteEvent(this.id).subscribe(() => {
+      this.toastr.success('Event deleted successfully');
       this.router.navigate(['/dashboard/main']); // Redirect to the main dashboard after deletion
     });
   }
 
+  openDeleteModal(content: any) {
+    this.modalReference = this.modalService.open(content);
+  }
 
+  confirmDelete() {
+    this.modalReference.close();
+    this.deleteEvent();
+  }
 
   
   updateEvent(updatedEvent: any) {
     this.eventService.updateEvent(this.id, updatedEvent,this.imageFile).subscribe((event: any) => {
       this.event = event; 
-      this.router.navigate(['/event-details', this.id]);  // Redirect to the main dashboard after updating
+      this.modalService.dismissAll()
+      this.toastr.success('Event updated successfully');
     });
   }
 
@@ -109,6 +121,9 @@ export class EventDetailsComponent implements OnInit {
 
   openModal(event: { likers: any[]; }, content: any) {
     this.likers = this.getLikers(event);
+      this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
+    }
+    openModalUpdate(content: any) {
       this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
     }
  

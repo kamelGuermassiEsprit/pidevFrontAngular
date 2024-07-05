@@ -63,7 +63,7 @@ export class EventService {
     return this.http.post(`${this.apiUrl}/api/LikeEvent/${id}`, { user });
   }
   participate(eventId: string, userId: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/api/${eventId}/participate`, { user: userId });
+    return this.http.post(`${this.apiUrl}/api/${eventId}/participate`,{ user: userId }, { responseType: 'blob' });
   }
 
   unparticipate(eventId: string, userId: string): Observable<any> {

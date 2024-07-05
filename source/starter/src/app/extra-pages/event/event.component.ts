@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import{EventService} from "../../services/event.service"
 import { getNames } from 'country-list';
 import axios from 'axios';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -35,7 +36,7 @@ select(e:any){
   this.image = e.target.files[0];
 }
 
-  constructor( private eventService:EventService, private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder
+  constructor( private eventService:EventService, private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder, private toastr: ToastrService
 
 
   ) { }
@@ -65,7 +66,7 @@ CreateEvent() {
   fd.append('image', this.image);
 
   this.eventService.createEvent(fd).subscribe((res) => {
-    console.log(res)
+    this.toastr.success('Event created successfully');
     this.router.navigate(['/dashboard/main'])
   });
 }

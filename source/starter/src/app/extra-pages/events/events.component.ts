@@ -19,11 +19,13 @@ likers: any;
 
 searchTitle: string = '';
 searchResults: any[] = [];
-searchPerformed: boolean = false;
+searchPerformed: boolean = false; 
 commentsVisible = false;
 
 participationStatus: { [eventId: string]: boolean } = {};
 userId = '66504e978b09ea67321b1e8e';
+currentUser = { _id: '66504e978b09ea67321b1e8e'}; //  current user
+
 
   constructor( private eventService:EventService,private modalService: NgbModal, private router: Router, private route: ActivatedRoute, private formBuilder: FormBuilder, private toastr: ToastrService
 
@@ -82,7 +84,6 @@ userId = '66504e978b09ea67321b1e8e';
    this.likers = this.getLikers(event);
      this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
    }
-
    likeEvent(event: any, userId: string) {
     this.eventService.likeEvent(event._id, userId).subscribe({
       next: (res: any) => {
@@ -90,14 +91,17 @@ userId = '66504e978b09ea67321b1e8e';
         if (res.message === 'Event liked') {
           // The event was liked
           event.likes += 1;
-          event.likers.push(userId);
+          const userExists = event.likers.some((u: any) => u._id === res.user._id);
+          if (!userExists) {
+            event.likers.push(res.user); // Add the user details to the likers array
+          }
           this.toastr.success('Event liked');
         } else if (res.message === 'Event unliked') {
           // The event was unliked
           event.likes -= 1;
-          const userIndex = event.likers.indexOf(userId);
+          const userIndex = event.likers.findIndex((u: any) => u._id === res.user._id);
           if (userIndex !== -1) {
-            event.likers.splice(userIndex, 1);
+            event.likers.splice(userIndex, 1); // Remove the user details from the likers array
           }
           this.toastr.success('Event unliked');
         } else {
@@ -113,18 +117,19 @@ userId = '66504e978b09ea67321b1e8e';
   
   
   
+  
 
   addComment(commentText: string, eventId: string) {
-    const comment = { user: '666dc519371979aac3312f13', text: commentText };  // Replace with the actual user ID
+    const comment = { user: '66504e978b09ea67321b1e8e', text: commentText };  // Replace with the actual user ID
     this.eventService.addCommentToEvent(eventId, comment).subscribe(
       (event: any) => {
         this.event = event;
-        console.log(this.event);
+        window.location.reload();
       },
       error => console.error('Error adding comment:', error)
     );
+    
    // this.router.navigate(['/Events/EventsList']); 
-    location.reload();
   }
 // events.component.ts
 participate(eventId: string) {
@@ -132,9 +137,18 @@ participate(eventId: string) {
     next: (response) => {
       // Update the participation status for the event
       this.participationStatus[eventId] = true;
-
-      // Display an alert message indicating successful participation
       this.toastr.success('You have successfully participated');
+
+      const url = window.URL.createObjectURL(response);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `participation_${eventId}_${this.userId}.pdf`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+
+
+     
+
     },
     error: (error) => {
       // Handle any errors that occur during the participation process
@@ -143,6 +157,7 @@ participate(eventId: string) {
     }
   });
 }
+
 unparticipate(eventId: string) {
   this.eventService.unparticipate(eventId, this.userId).subscribe({
     next: (response) => {
