@@ -57,6 +57,7 @@ export function createTranslateLoader(http: HttpClient) {
     NgScrollbarModule,
     FormsModule,
     MatIconModule,
+    
     LoadingBarRouterModule,
     TranslateModule.forRoot({
       loader: {

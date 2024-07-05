@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Review } from '../model/review.model';
+import { TouristSite } from '../model/site.model';
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +35,13 @@ export class SiteReviewService {
   deleteSiteReview(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
- 
+  getMostRatedSite(): Observable<TouristSite> {
+    return this.http.get<TouristSite>(`${this.apiUrl}/mostrated`);
+  }
+  getSitesSortedByCommentCount(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/sites/sorted-by-comments`);
+  }
 }
+
+ 
+

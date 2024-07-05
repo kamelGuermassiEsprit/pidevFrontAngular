@@ -52,7 +52,16 @@
             <p>Category: {{ site.category }}</p>
             <p>Average Rating: {{ site.average_rating | customRating }}</p>
             <div class="photos">
-              <img *ngFor="let photo of site.photos" [src]="'http://localhost:5001/' + photo" alt="{{ site.name }}"class="img-fluid"style="width: 200px; height: auto;">
+              <!-- Make photos clickable to open in a lightbox -->
+              <a *ngFor="let photo of site.photos" 
+                 [href]="'http://localhost:5001/' + photo" 
+                 data-lightbox="site-photos" 
+                 [attr.data-title]="site.name">
+                <img [src]="'http://localhost:5001/' + photo" 
+                     alt="{{ site.name }}" 
+                     class="img-fluid" 
+                     style="width: 200px; height: auto;">
+              </a>
             </div>
             <div class="review-section">
               <h5>Leave a Review</h5>
