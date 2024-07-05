@@ -16,10 +16,12 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { AccueilComponent } from './accueil/accueil.component';
 import { ListingDetailsComponent } from './listing-details/listing-details.component';
 import { ReseravtionsComponent } from './reseravtions/reseravtions.component';
+import { AddReservationComponent } from './add-reservation/add-reservation.component';
+import { UpdateReservationComponent } from './update-reservation/update-reservation.component';
 
 
 @NgModule({
-  declarations: [MainComponent, Dashboard2Component, ChatComponent, AccueilComponent, ListingDetailsComponent, ReseravtionsComponent],
+  declarations: [MainComponent, Dashboard2Component, ChatComponent, AccueilComponent, ListingDetailsComponent, ReseravtionsComponent, AddReservationComponent, UpdateReservationComponent],
   imports: [
     CommonModule,
     NgbModule,

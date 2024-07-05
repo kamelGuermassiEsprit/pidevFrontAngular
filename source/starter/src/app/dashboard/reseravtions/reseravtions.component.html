@@ -22,10 +22,14 @@
       <p><strong>Guest Message:</strong> {{ reservation.guestMessage }}</p>
       <p><strong>Host Response:</strong> {{ reservation.hostResponse }}</p>
       <button (click)="deleteReservation(reservation._id)" class="btn btn-danger">Delete</button>
+      <a [routerLink]="['/dashboard/update-reservation', reservation._id]" class="btn btn-primary">Update</a>
+      <!-- Generate PDF button -->
+      <button *ngIf="reservation.status === 'confirmed'" (click)="generatePDF(reservation._id)" class="btn btn-secondary">Generate PDF</button>
     </div>
   </div>
 
   <div *ngIf="reservations.length === 0">
     <p>No reservations found.</p>
   </div>
+  
 </section>

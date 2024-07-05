@@ -1,0 +1,55 @@
+  <!-- update-reservation.component.html -->
+<section class="main-content">
+    <ul class="breadcrumb breadcrumb-style">
+        <li class="breadcrumb-item">
+          <h5 class="page-title m-b-0">Reservations</h5>
+        </li>
+        <li class="breadcrumb-item">Reservations</li>
+        <li class="breadcrumb-item bcrumb-1">
+          <a routerLink="/dashboard/main">
+            <i class="fas fa-home font-17"></i>
+          </a>
+        </li>
+      </ul>
+      
+    <!-- update-reservation.component.html -->
+<section class="main-content">
+    <ul class="breadcrumb breadcrumb-style">
+      <li class="breadcrumb-item">
+        <h5 class="page-title m-b-0">Reservations</h5>
+      </li>
+      <li class="breadcrumb-item">Reservations</li>
+      <li class="breadcrumb-item bcrumb-1">
+        <a routerLink="/dashboard/main">
+          <i class="fas fa-home font-17"></i>
+        </a>
+      </li>
+    </ul>
+  
+    <div *ngIf="reservation">
+      <h2>Update Reservation</h2>
+  
+      <div>
+        <h3>Reservation Details:</h3>
+        <p><strong>Start Date:</strong> <input type="date" [(ngModel)]="startDate"></p>
+        <p><strong>End Date:</strong> <input type="date" [(ngModel)]="endDate"></p>
+        <p><strong>Guest Message:</strong> <textarea [(ngModel)]="guestMessage"></textarea></p>
+        <!-- Display other reservation details as needed -->
+  
+        <!-- Error message -->
+        <div *ngIf="errorMessage" class="alert alert-danger">
+          {{ errorMessage }}
+        </div>
+  
+        <!-- Update button -->
+        <button (click)="updateReservation()" class="btn btn-primary">Update Reservation</button>
+      </div>
+    </div>
+  
+    <div *ngIf="!reservation">
+      <p>Loading reservation details...</p>
+    </div>
+  </section>
+  
+  </section>
+  

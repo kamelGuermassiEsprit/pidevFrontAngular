@@ -15,8 +15,24 @@ export class ReservationService {
     return this.http.get<any[]>(`${this.apiUrl}/reservation/getAllReservations`);
   }
 
+  getReservationById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/reservation/getReservation/${id}`);
+  }
+  
   deleteReservation(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/reservation/deleteReservation/${id}`);
   }
-}
+  addReservation(reservation: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/reservation/addReservation/`, reservation);
+  }
 
+  updateReservation(id: string, reservation: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/reservation/updateReservation/${id}`, reservation);
+  }
+  
+  generateReservationPDF(reservationId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/reservation/getReservationPDF/${reservationId}`, {
+      responseType: 'blob' // Important to specify response type as blob for PDF
+    })
+}
+}

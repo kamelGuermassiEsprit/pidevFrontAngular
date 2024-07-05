@@ -40,4 +40,18 @@ export class ReseravtionsComponent implements OnInit {
     )}
     window.location.reload();
   }
+
+  generatePDF(id: string): void {
+    this.reservationService.generateReservationPDF(id).subscribe(
+      (pdfBlob) => {
+        const blob = new Blob([pdfBlob], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        window.open(url); // Open PDF in a new tab
+      },
+      (error) => {
+        console.error('Error generating PDF:', error);
+        // Handle error
+      }
+    );
+  }
 }

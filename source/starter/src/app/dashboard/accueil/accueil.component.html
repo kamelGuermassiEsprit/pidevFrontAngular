@@ -1,3 +1,4 @@
+<!-- accueil.component.html -->
 <section class="main-content">
   <ul class="breadcrumb breadcrumb-style">
     <li class="breadcrumb-item">
@@ -5,7 +6,7 @@
     </li>
     <li class="breadcrumb-item">Houses</li>
     <li class="breadcrumb-item bcrumb-1">
-      <a routerLink="/dashboard/main">
+      <a routerLink="/">
         <i class="fas fa-home font-17"></i>
       </a>
     </li>
@@ -24,7 +25,7 @@
     <h2>Listings</h2>
     <ul class="list-group">
       <li *ngFor="let listing of listings" class="list-group-item mb-4">
-        <a [routerLink]="['/dashboard/listing-details', listing._id]">{{listing.title}}</a>
+        <a [routerLink]="['/dashboard/listing-details', listing._id]">{{ listing.title }}</a>
         <p class="listing-description">{{ listing.description }}</p>
         <div *ngIf="listing.photos && listing.photos.length > 0">
           <h5>Photos:</h5>
@@ -40,14 +41,17 @@
         <p *ngIf="listing.ratings && listing.ratings.length > 0" class="mb-0">
           <strong>Average Rating:</strong> {{ calculateAverageRating(listing.ratings) | number: '1.1-1' }}
         </p>
-        
+
         <button (click)="deleteListing(listing._id)" class="btn btn-danger">Delete</button>
-        
+
         <!-- Add Rating Form -->
         <div>
           <input type="number" [(ngModel)]="listing.newRating" name="rating" min="1" max="5" placeholder="Rate 1-5">
           <button (click)="addRating(listing._id, listing.newRating)" class="btn btn-primary">Add Rating</button>
         </div>
+
+        <!-- Add Reservation button with disabled attribute -->
+        <button [disabled]="!canAddReservation(listing.availability)" [routerLink]="['/dashboard/add-reservation', { listingId: listing._id }]">Add Reservation</button>
       </li>
     </ul>
   </div>

@@ -88,4 +88,10 @@ export class AccueilComponent implements OnInit {
     // Process the rating value
     console.log(`Sorting listings by rating: ${rating}`);
   }
+
+  // Method to check if reservation can be added based on availability
+  canAddReservation(availability: string): boolean {
+    // Convert availability to lowercase and check if it contains 'available'
+  return availability.toLowerCase().includes('available now');
+  }
 }
