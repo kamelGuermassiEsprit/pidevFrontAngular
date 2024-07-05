@@ -79,15 +79,20 @@ export class AccueilComponent implements OnInit {
     );
   }
 
-  sortListingsByRating(rating: string | null): void {
-    if (rating === null) {
-      // Handle null rating as needed
-      console.log('No rating selected.');
-      return;
-    }
-    // Process the rating value
-    console.log(`Sorting listings by rating: ${rating}`);
+
+  getListingsByRating(): void {
+    this.listingService.getListingsByRating().subscribe(
+      (data) => {
+        this.listings = data;
+        console.log('Listings sorted by rating:', this.listings);
+      },
+      (error) => {
+        console.error('Error fetching sorted listings:', error);
+      }
+    );
   }
+  
+  
 
   // Method to check if reservation can be added based on availability
   canAddReservation(availability: string): boolean {

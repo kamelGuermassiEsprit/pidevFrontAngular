@@ -21,6 +21,9 @@
       </div>
     </form>
   </div>
+  <button class="btn btn-primary mb-3" (click)="getListingsByRating()">
+    Sort by Rating
+  </button>
   <div *ngIf="listings.length > 0; else noListings">
     <h2>Listings</h2>
     <ul class="list-group">
