@@ -1,0 +1,14 @@
+<div class="star-rating">
+    <i
+      *ngFor="let star of stars; let i = index"
+      class="fa"
+      [ngClass]="{
+        'fa-star': i < rating,
+        'fa-star-o': i >= rating
+      }"
+      (click)="onRate(i + 1)"
+      (mouseover)="onHover(i + 1)"
+      (mouseleave)="onHover(rating)"
+    ></i>
+  </div>
+  

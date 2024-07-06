@@ -1,0 +1,67 @@
+<section class="main-content">
+  <ul class="breadcrumb breadcrumb-style">
+    <li class="breadcrumb-item">
+      <h5 class="page-title m-b-0">Listing Details</h5>
+    </li>
+    <li class="breadcrumb-item">Listing Management</li>
+    <li class="breadcrumb-item">
+      <a routerLink="/dashboard/main">
+        <i class="fas fa-home font-17"></i>
+      </a>
+    </li>
+  </ul>
+  <div class="section-body">
+    <div class="row">
+      <div class="col-12 col-md-12 col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            <h4>{{ listing.title }}</h4>
+          </div>
+          <div class="card-body">
+            <form (ngSubmit)="onSubmit()">
+              <div class="mb-3">
+                <label for="title" class="form-label"><strong>Title:</strong></label>
+                <input type="text" id="title" class="form-control" [(ngModel)]="listing.title" name="title" required>
+              </div>
+              <div class="mb-3">
+                <label for="description" class="form-label"><strong>Description:</strong></label>
+                <textarea id="description" class="form-control" [(ngModel)]="listing.description" name="description" required></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="address" class="form-label"><strong>Address:</strong></label>
+                <input type="text" id="address" class="form-control" [(ngModel)]="listing.address" name="address" required>
+              </div>
+              <div class="mb-3">
+                <label for="amneties" class="form-label"><strong>Amneties:</strong></label>
+                <input type="text" id="amneties" class="form-control" [(ngModel)]="listing.amneties" name="amneties">
+              </div>
+              <div class="mb-3">
+                <label for="availability" class="form-label"><strong>Availability:</strong></label>
+                <input type="text" id="availability" class="form-control" [(ngModel)]="listing.availability" name="availability">
+              </div>
+              <div class="mb-3">
+                <label for="houseRules" class="form-label"><strong>House Rules:</strong></label>
+                <input type="text" id="houseRules" class="form-control" [(ngModel)]="listing.houseRules" name="houseRules">
+              </div>
+              <div class="mb-3">
+                <label for="photos" class="form-label"><strong>Photos:</strong></label>
+                <input type="file" id="photos" class="form-control" (change)="onPhotoSelected($event)" multiple>
+                <div class="row mt-3">
+                  <div *ngFor="let photo of listing.photos" class="col-md-3 mb-3">
+                    <img [src]="'http://localhost:5001/' + photo" alt="Listing Photo" class="img-fluid" />
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="ratings" class="form-label"><strong>Average Rating:</strong></label>
+                <p id="ratings">{{ calculateAverageRating(listing.ratings) | number: '1.1-1' }}</p>
+              </div>
+              <button type="submit" class="btn btn-primary">Update</button>
+
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

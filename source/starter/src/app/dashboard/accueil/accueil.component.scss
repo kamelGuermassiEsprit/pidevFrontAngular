@@ -1,0 +1,33 @@
+.ngxTableHeader {
+    width: 100%;
+  }
+
+  .table-search-area {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .search-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .search-label {
+    margin-top: auto; 
+
+        /* Adjust spacing as needed */
+  }
+
+  .search-icon {
+    font-size: 20px;
+  }
+
+  .search-field {
+    width: 100%;
+    max-width: 500px; /* Adjust this width as needed */
+  }
+
+  .list-group-item {
+    width: 100%;
+  }

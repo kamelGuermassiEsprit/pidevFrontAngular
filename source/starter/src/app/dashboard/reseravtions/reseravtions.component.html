@@ -1,0 +1,34 @@
+<section class="main-content">
+  <ul class="breadcrumb breadcrumb-style">
+    <li class="breadcrumb-item">
+      <h5 class="page-title m-b-0">Reservations</h5>
+    </li>
+    <li class="breadcrumb-item">Reservations</li>
+    <li class="breadcrumb-item bcrumb-1">
+      <a routerLink="/dashboard/main">
+        <i class="fas fa-home font-17"></i>
+      </a>
+    </li>
+  </ul>
+
+  <div *ngIf="reservations.length > 0" class="reservations-container">
+    <h3>All Reservations:</h3>
+    <div *ngFor="let reservation of reservations" class="reservation-box">
+     
+      <p><strong>Start Date:</strong> {{ reservation.startDate | date }}</p>
+      <p><strong>End Date:</strong> {{ reservation.endDate | date }}</p>
+      <p><strong>Status:</strong> {{ reservation.status }}</p>
+      <p><strong>Guest Message:</strong> {{ reservation.guestMessage }}</p>
+      <p><strong>Host Response:</strong> {{ reservation.hostResponse }}</p>
+      <button (click)="deleteReservation(reservation._id)" class="btn btn-danger">Delete</button>
+      <a [routerLink]="['/dashboard/update-reservation', reservation._id]" class="btn btn-primary">Update</a>
+      <!-- Generate PDF button -->
+      <button *ngIf="reservation.status === 'confirmed'" (click)="generatePDF(reservation._id)" class="btn btn-secondary">Generate PDF</button>
+    </div>
+  </div>
+
+  <div *ngIf="reservations.length === 0">
+    <p>No reservations found.</p>
+  </div>
+  
+</section>
