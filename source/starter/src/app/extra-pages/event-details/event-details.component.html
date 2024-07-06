@@ -1,0 +1,128 @@
+<section class="main-content">
+  <ul class="breadcrumb breadcrumb-style">
+    <li class="breadcrumb-item">
+      <a routerLink='/Events/EventsList'>
+        <h5 class="page-title m-b-0">Events</h5>
+      </a>
+    </li>
+    <li class="breadcrumb-item">Event Details</li>
+    <li class="breadcrumb-item">
+      <a routerLink="/dashboard/main">
+        <i class="fas fa-home font-17"></i>
+      </a>
+    </li>
+  </ul>
+
+  <div class="section-body">
+    <div class="row">
+      <div class="col-md-12 col-lg-8 col-xl-8">
+        <div class="card">
+          <div class="card-header">
+            <h4>{{ event?.title }}</h4>
+          </div>
+          <div class="card-body">
+            <img [src]="'http://localhost:5001/uploads/' + event?.image" alt="Event image" class="card-img-top mb-4">
+            <p>{{ event?.description }}</p>
+            <p><small class="text-muted">Country: {{ event?.country }}</small></p>
+            <p><small class="text-muted">City: {{ event?.city }}</small></p>
+            <p><small class="text-muted">Location: {{ event?.location }}</small></p>
+            <p><small class="text-muted">Start: {{ event?.date_debut | date:'d MMMM y, h:mm a' }}</small></p>
+            <p><small class="text-muted">End: {{ event?.date_fin | date:'d MMMM y, h:mm a' }}</small></p>
+            <p><small class="text-muted">{{ event?.etat }}</small></p>
+            <p>Participants: <small class="text-muted">{{ getParticipantNames() }}</small></p>
+
+            <div class="icon-container" style="display: flex; flex-direction: column; gap: 30px;">
+              <div style="display: flex; align-items: center; gap: 3px;">
+                <button class="btn-primary" (click)="openModal(event, content)" style="background-color: transparent; border: none; color: #0364e2; display: flex; align-items: center;">
+                  <i class="fas fa-thumbs-up"></i>
+                  <span>{{ event.likes }}</span>
+                </button>
+                <button class="btn-primary" (click)="commentsVisible = !commentsVisible" style="background-color: transparent; border: none; color: #63E6BE; display: flex; align-items: center;">
+                  <i class="fas fa-comment-dots fa-lg"></i>
+                  <span>{{ event.comments.length }}</span>
+                </button>
+              </div>
+            </div>
+
+            <ng-template #content let-modal>
+              <div class="modal-header justify-content-between">
+                <h4 class="modal-title" id="modal-basic-title">Likers</h4>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>{{ likers }}</p>
+              </div>
+            </ng-template>
+
+            <div *ngIf="commentsVisible">
+              <div class="media-body">
+                <div *ngFor="let comment of event.comments" class="media mt-3 border p-3 mb-5">
+                  <img [src]="'http://localhost:5001/' + comment.user.image" class="mr-3 mt-1 card" style="border: 2px solid #000;" alt="User Image" width="60">
+                  <div class="media-body">
+                    <h4 style="font-size: 0.9em;">
+                      {{ comment.user.first_name }} {{ comment.user.last_name }}
+                      <small><i>Posted on {{ comment.date | date }}</i></small>
+                    </h4>
+                    <p style="font-size: 0.9em;">{{ comment.text }}</p>
+                    <button type="button" class="btn btn-danger btn-sm" (click)="deleteComment(comment)">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-footer d-flex">
+              <button class="btn btn-danger btn-sm" (click)="openDeleteModal(deleteModal)" style="align-self: start; margin-right: 5px; margin-left: auto;">Delete Event</button>
+              <button class="btn btn-primary btn-sm" (click)="openModalUpdate(updateEventModal)">Edit Event</button>
+              <ng-template #deleteModal let-modal>
+                <div class="modal-header">
+                  <h4 class="modal-title">Confirm Deletion</h4>
+                  <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>Are you sure you want to delete this event?</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" (click)="confirmDelete()">Yes</button>
+                  <button type="button" class="btn btn-secondary" (click)="modal.dismiss('cancel click')">No</button>
+                </div>
+              </ng-template>
+              <ng-template #updateEventModal let-modal>
+                <div class="modal-header">
+                  <h4 class="modal-title">Update Event</h4>
+                  <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form class="mt-3 mb-5" (ngSubmit)="updateEvent(updateEventForm.value)" #updateEventForm="ngForm">
+                    <input type="text" [(ngModel)]="event.title" name="title" placeholder="Title" class="mt-3 mb-3 form-control">
+                    <input type="text" [(ngModel)]="event.description" name="description" placeholder="Description" class="form-control">
+                    <select id="country" [(ngModel)]="event.country" name="country" required #country="ngModel" class="mt-3 form-control">
+                      <option *ngFor="let country of countries" [value]="country">{{ country }}</option>
+                    </select>
+                    <input type="text" [(ngModel)]="event.city" name="city" placeholder="City" class="mt-3 mb-2 form-control">
+                    <input type="text" [(ngModel)]="event.location" name="location" placeholder="Location" class="mt-3 mb-3 form-control">
+                    <input type="datetime-local" [(ngModel)]="event.date_debut" name="date_debut" placeholder="Date Debut" class="form-control">
+                    <input type="datetime-local" [(ngModel)]="event.date_fin" name="date_fin" placeholder="Date Fin" class="mt-3 mb-3 form-control">
+                    <select [(ngModel)]="event.etat" name="etat" class="form-control">
+                      <option value="" disabled>Select Etat</option>
+                      <option value="Ouvert">Ouvert</option>
+                      <option value="Fermé">Fermé</option>
+                      <option value="Annulé">Annulé</option>
+                    </select>
+                    <input type="file" (change)="onImageChange($event)" name="image" placeholder="Image" class="form-control">
+                    <button type="submit" class="btn btn-primary mt-3">Update Event</button>
+                  </form>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

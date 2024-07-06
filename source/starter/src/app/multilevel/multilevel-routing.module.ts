@@ -2,16 +2,17 @@ import { First3Component } from './first3/first3.component';
 import { First2Component } from './first2/first2.component';
 import { First1Component } from './first1/first1.component';
 import { Second2Component } from './secondlevel/second2/second2.component';
-import { NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { Second1Component } from './secondlevel/second1/second1.component';
 import { Third1Component } from './thirdlevel/third1/third1.component';
-
+import { path } from 'd3';
 const routes: Routes = [
   {
     path: 'first1',
     component: First1Component,
   },
+
   {
     path: 'first2',
     component: First2Component,
@@ -32,6 +33,7 @@ const routes: Routes = [
     path: 'thirdlevel/third1',
     component: Third1Component,
   },
+ 
 ];
 
 @NgModule({

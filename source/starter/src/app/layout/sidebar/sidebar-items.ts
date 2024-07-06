@@ -1,3 +1,4 @@
+import { path } from 'd3';
 import { RouteInfo } from './sidebar.metadata';
 export const ROUTES: RouteInfo[] = [
   {
@@ -24,17 +25,6 @@ export const ROUTES: RouteInfo[] = [
       {
         path: '/dashboard/main',
         title: 'MENUITEMS.HOME.LIST.DASHBOARD1',
-        iconType: '',
-        icon: '',
-        class: 'ml-menu',
-        groupTitle: false,
-        badge: '',
-        badgeClass: '',
-        submenu: [],
-      },
-      {
-        path: '/dashboard/dashboard2',
-        title: 'MENUITEMS.HOME.LIST.DASHBOARD2',
         iconType: '',
         icon: '',
         class: 'ml-menu',
@@ -182,7 +172,7 @@ export const ROUTES: RouteInfo[] = [
     path: '',
     title: 'Tourist Sites Interface',
     iconType: 'feather',
-    icon: 'anchor',
+    icon: 'layout',
     class: 'menu-toggle',
     groupTitle: false,
     badge: '',
@@ -202,6 +192,29 @@ export const ROUTES: RouteInfo[] = [
       {
         path: '/extra-pages/dashboard',
         title: 'Tourist Sites dashboard',
+        iconType: '',
+        icon: '',
+        class: 'ml-menu',
+        groupTitle: false,
+        badge: '',
+        badgeClass: '',
+        submenu: [],
+      },
+
+      {
+        path: '/Events/EventMangement',
+        title: 'Event Management',
+        iconType: '',
+        icon: '',
+        class: 'ml-menu',
+        groupTitle: false,
+        badge: '',
+        badgeClass: '',
+        submenu: [],
+      },
+      {
+        path: '/Events/EventsList',
+        title: 'Events list',
         iconType: '',
         icon: '',
         class: 'ml-menu',

@@ -27,6 +27,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+
 import {
   HttpClientModule,
   HTTP_INTERCEPTORS,
@@ -34,6 +35,7 @@ import {
 } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ListingManagementComponent } from './listing-management/listing-management.component';
+import { AngularEditorModule } from '@kolkov/angular-editor';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -52,6 +54,7 @@ export function createTranslateLoader(http: HttpClient) {
     ListingManagementComponent,
   ],
   imports: [
+    AngularEditorModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
@@ -69,6 +72,11 @@ export function createTranslateLoader(http: HttpClient) {
         useFactory: createTranslateLoader,
         deps: [HttpClient],
       },
+    }),
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
     }),
     // core & shared
     CoreModule,
