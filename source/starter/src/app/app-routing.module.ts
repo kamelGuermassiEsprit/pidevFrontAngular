@@ -30,6 +30,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'extra-pages',
+        loadChildren: () =>
+          import('./extra-pages/extra-pages.module').then(
+            (m) => m.ExtraPagesModule
+          ),
+      },
+      {
         path: 'multilevel',
         loadChildren: () =>
           import('./multilevel/multilevel.module').then(
